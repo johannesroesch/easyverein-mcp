@@ -1,0 +1,31 @@
+{
+    "name": "easyverein/mcp-server",
+    "description": "MCP server exposing the EasyVerein API v3.0 as MCP tools",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "slim/slim": "^4.0",
+        "slim/psr7": "^1.0",
+        "vlucas/phpdotenv": "^5.0",
+        "php-di/php-di": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EasyVerein\\Mcp\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EasyVerein\\Mcp\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "php-mock/php-mock-phpunit": "^2.9"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-unit": "phpunit --testsuite Unit",
+        "test-integration": "phpunit --testsuite Integration"
+    }
+}

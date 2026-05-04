@@ -1,0 +1,38 @@
+# Dependencies
+/vendor/
+
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PHP
+.phpunit.result.cache
+/coverage/
+
+# Claude Code
+.claude/
+
+# Temporary / generation scripts (not part of the distributable server)
+api-spec.json
+api-spec2.json
+api-spec2-refactored.json
+api-spec2-migration-notes.md
+extract-schemas.php
+generate-props.php
+fix_spec.py
+fix_spec2.py
+fix_spec3.py
+transform_spec.py
+
+# Playwright MCP sessions
+.playwright-mcp/

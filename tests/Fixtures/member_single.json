@@ -1,0 +1,8 @@
+{
+    "id": 42,
+    "profileName": "Max Mustermann",
+    "email": "max@example.com",
+    "isActive": true,
+    "joinedAt": "2020-01-15",
+    "memberNumber": "2020-001"
+}

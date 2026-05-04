@@ -1,0 +1,11 @@
+{
+    "count": 3,
+    "next": "https://easyverein.com/api/v3.0/member/?limit=10&offset=10",
+    "previous": null,
+    "current": "https://easyverein.com/api/v3.0/member/?limit=10&offset=0",
+    "results": [
+        {"id": 1, "profileName": "Max Mustermann", "email": "max@example.com"},
+        {"id": 2, "profileName": "Erika Musterfrau", "email": "erika@example.com"},
+        {"id": 3, "profileName": "Hans Hansen", "email": "hans@example.com"}
+    ]
+}

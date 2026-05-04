@@ -1,0 +1,10 @@
+{
+    "count": 25,
+    "next": "https://easyverein.com/api/v3.0/member/?limit=10&offset=10",
+    "previous": "https://easyverein.com/api/v3.0/member/?limit=10&offset=0",
+    "current": "https://easyverein.com/api/v3.0/member/?limit=10&offset=0",
+    "results": [
+        {"id": 1, "profileName": "Member One"},
+        {"id": 2, "profileName": "Member Two"}
+    ]
+}

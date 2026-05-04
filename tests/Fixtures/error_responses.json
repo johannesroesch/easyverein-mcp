@@ -1,0 +1,6 @@
+{
+    "not_found": {"detail": "Not found."},
+    "validation_error": {"field": ["This field is required."]},
+    "auth_error": {"detail": "Authentication credentials were not provided."},
+    "rate_limit": {"detail": "Request was throttled. Expected available in 30 seconds."}
+}
