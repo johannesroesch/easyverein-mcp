@@ -25,7 +25,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: curl, mbstring
-          coverage: xdebug
+          coverage: ${{ matrix.php == '8.2' && 'xdebug' || 'none' }}
 
       - name: Cache Composer packages
         uses: actions/cache@v4
@@ -47,13 +47,27 @@ jobs:
         if: matrix.php == '8.2'
         run: php vendor/bin/phpunit --coverage-clover coverage.xml --coverage-text
 
-      - name: Upload coverage artifact
+      - name: Upload coverage to Codecov
         if: matrix.php == '8.2'
-        uses: actions/upload-artifact@v4
+        uses: codecov/codecov-action@v5
         with:
-          name: coverage-report
-          path: coverage.xml
-          retention-days: 7
+          files: coverage.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Enforce coverage threshold (70 % lines)
+        if: matrix.php == '8.2'
+        run: |
+          LINES=$(php -r "
+            \$x = simplexml_load_file('coverage.xml');
+            \$m = \$x->project->metrics;
+            echo round((int)\$m['coveredstatements'] / max(1, (int)\$m['statements']) * 100, 1);
+          ")
+          echo "Line coverage: ${LINES}%"
+          if (( $(echo "$LINES < 70" | bc -l) )); then
+            echo "Coverage ${LINES}% is below the 70% threshold"
+            exit 1
+          fi
 
   # ── Dependency audit ───────────────────────────────────────────────────────
   audit:
