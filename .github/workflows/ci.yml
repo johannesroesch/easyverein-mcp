@@ -50,33 +50,36 @@ jobs:
       - name: Coverage summary and threshold check
         if: matrix.php == '8.2'
         run: |
-          php -r "
-            \$x = simplexml_load_file('coverage.xml');
-            \$m = \$x->project->metrics;
-            \$stmts   = (int)\$m['statements'];
-            \$covered = (int)\$m['coveredstatements'];
-            \$pct     = \$stmts > 0 ? round(\$covered / \$stmts * 100, 1) : 0;
-            \$icon    = \$pct >= 80 ? '🟢' : (\$pct >= 70 ? '🟡' : '🔴');
+          php << 'PHPEOF'
+          <?php
+          $x       = simplexml_load_file('coverage.xml');
+          $m       = $x->project->metrics;
+          $stmts   = (int) $m['statements'];
+          $covered = (int) $m['coveredstatements'];
+          $pct     = $stmts > 0 ? round($covered / $stmts * 100, 1) : 0.0;
+          $icon    = $pct >= 80 ? '🟢' : ($pct >= 70 ? '🟡' : '🔴');
 
-            \$classes   = (int)\$m['classes'];
-            \$covCls    = (int)\$m['coveredclasses'];
-            \$methods   = (int)\$m['methods'];
-            \$covMth    = (int)\$m['coveredmethods'];
+          $classes = (int) $m['classes'];
+          $covCls  = (int) $m['coveredclasses'];
+          $methods = (int) $m['methods'];
+          $covMth  = (int) $m['coveredmethods'];
+          $pctMth  = $methods > 0 ? round($covMth / $methods * 100, 1) : 0.0;
+          $pctCls  = $classes > 0 ? round($covCls / $classes * 100, 1) : 0.0;
 
-            \$summary = \"## {$icon} Coverage: {\$pct}%\n\n\"
-              . \"| Metric | Covered | Total | % |\n\"
-              . \"|--------|---------|-------|---|\n\"
-              . \"| Lines  | {\$covered} | {\$stmts} | {\$pct}% |\n\"
-              . \"| Methods | {\$covMth} | {\$methods} | \" . (\$methods > 0 ? round(\$covMth/\$methods*100,1) : 0) . \"% |\n\"
-              . \"| Classes | {\$covCls} | {\$classes} | \" . (\$classes > 0 ? round(\$covCls/\$classes*100,1) : 0) . \"% |\n\";
+          $summary = "## {$icon} Coverage: {$pct}%\n\n"
+              . "| Metric | Covered | Total | % |\n"
+              . "|--------|---------|-------|---|\n"
+              . "| Lines   | {$covered} | {$stmts} | {$pct}% |\n"
+              . "| Methods | {$covMth}  | {$methods} | {$pctMth}% |\n"
+              . "| Classes | {$covCls}  | {$classes} | {$pctCls}% |\n";
 
-            file_put_contents(getenv('GITHUB_STEP_SUMMARY'), \$summary);
+          file_put_contents(getenv('GITHUB_STEP_SUMMARY'), $summary);
 
-            if (\$pct < 70) {
-              fwrite(STDERR, \"Coverage {\$pct}% is below the 70% threshold\n\");
+          if ($pct < 70) {
+              fwrite(STDERR, "Coverage {$pct}% is below the 70% threshold\n");
               exit(1);
-            }
-          "
+          }
+          PHPEOF
 
   # ── Dependency audit ───────────────────────────────────────────────────────
   audit:
