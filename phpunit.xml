@@ -22,15 +22,4 @@
         </include>
     </source>
 
-    <coverage>
-        <report>
-            <clover outputFile="coverage.xml"/>
-            <text outputFile="php://stdout" showOnlySummary="true"/>
-        </report>
-    </coverage>
-
-    <logging>
-        <junit outputFile="test-results.xml"/>
-    </logging>
-
 </phpunit>
