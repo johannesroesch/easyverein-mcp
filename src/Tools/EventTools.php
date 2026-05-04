@@ -6,9 +6,8 @@ namespace EasyVerein\Mcp\Tools;
 
 use EasyVerein\Mcp\ApiClient;
 
-class EventTools
+class EventTools extends AbstractTools
 {
-    public function __construct(private readonly ApiClient $client) {}
 
     public function getDefinitions(): array
     {
@@ -150,39 +149,4 @@ class EventTools
         };
     }
 
-    // $urlFields maps field name → API path (e.g. 'application_form' => '/application-form/').
-    // Integer values for those fields are converted to hyperlinked URLs before serialisation.
-    private function bodyFrom(array $p, array $fields, array $urlFields = []): string
-    {
-        $body = [];
-        foreach ($fields as $field) {
-            if (array_key_exists($field, $p)) {
-                $value = $p[$field];
-                if (isset($urlFields[$field]) && is_int($value)) {
-                    $value = $this->client->urlRef($urlFields[$field], $value);
-                }
-                $body[$field] = $value;
-            }
-        }
-        return json_encode($body);
-    }
-
-    private function pagination(array $p): array
-    {
-        $q = [];
-        if (isset($p['limit']))  $q['limit']  = $p['limit'];
-        if (isset($p['page']))   $q['page']   = $p['page'];
-        return $q;
-    }
-
-    private function optional(array $p, string $key): array
-    {
-        return isset($p[$key]) ? [$key => $p[$key]] : [];
-    }
-
-    private function deleted(string $token, string $path, string $label): string
-    {
-        $this->client->delete($token, $path);
-        return json_encode(['message' => "$label deleted."]);
-    }
 }

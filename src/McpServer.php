@@ -8,9 +8,12 @@ use EasyVerein\Mcp\Tools\ContactDetailsTools;
 use EasyVerein\Mcp\Tools\EventTools;
 use EasyVerein\Mcp\Tools\FinanceTools;
 use EasyVerein\Mcp\Tools\ForumTools;
+use EasyVerein\Mcp\Tools\InventoryTools;
 use EasyVerein\Mcp\Tools\MemberTools;
 use EasyVerein\Mcp\Tools\MiscTools;
 use EasyVerein\Mcp\Tools\PasscreatorTools;
+use EasyVerein\Mcp\Tools\ProtocolTools;
+use EasyVerein\Mcp\Tools\TaskTools;
 
 class McpServer
 {
@@ -96,6 +99,9 @@ TEXT;
             new EventTools($client),
             new FinanceTools($client),
             new ForumTools($client),
+            new TaskTools($client),
+            new ProtocolTools($client),
+            new InventoryTools($client),
             new MiscTools($client),
             new PasscreatorTools($client),
         ] as $toolClass) {

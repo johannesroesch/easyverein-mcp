@@ -6,9 +6,8 @@ namespace EasyVerein\Mcp\Tools;
 
 use EasyVerein\Mcp\ApiClient;
 
-class MiscTools
+class MiscTools extends AbstractTools
 {
-    public function __construct(private readonly ApiClient $client) {}
 
     public function getDefinitions(): array
     {
@@ -18,21 +17,6 @@ class MiscTools
         ];
         $id   = ['id'   => ['type' => 'integer', 'description' => 'Record ID']];
         $body = ['body' => ['type' => 'string',  'description' => 'JSON body']];
-
-        $taskFields = [
-            'name'         => ['type' => 'string',  'description' => 'Task title'],
-            'description'  => ['type' => 'string',  'description' => 'Task description'],
-            'due_date'     => ['type' => 'string',  'description' => 'Due date (YYYY-MM-DD)'],
-            'completed'    => ['type' => 'boolean', 'description' => 'Whether completed'],
-            'assigned_to'  => ['type' => 'integer', 'description' => 'Assigned member ID'],
-            'task_group'   => ['type' => 'integer', 'description' => 'Task group ID'],
-            'attachments'  => ['type' => 'array',   'description' => 'Attachment IDs (array)'],
-        ];
-
-        $taskCommentFields = [
-            'text'    => ['type' => 'string',  'description' => 'Comment text'],
-            'task'    => ['type' => 'integer', 'description' => 'Task ID'],
-        ];
 
         $documentTemplateFields = [
             'name'        => ['type' => 'string',  'description' => 'Template name'],
@@ -148,64 +132,6 @@ class MiscTools
             'member' => ['type' => 'integer', 'description' => 'Member ID to normalize'],
         ];
 
-        $passFields = [
-            'name'            => ['type' => 'string',  'description' => 'Pass name'],
-            'serial_number'   => ['type' => 'string',  'description' => 'Serial number'],
-            'barcode_value'   => ['type' => 'string',  'description' => 'Barcode value'],
-            'expiration_date' => ['type' => 'string',  'description' => 'Expiration date (YYYY-MM-DD)'],
-            'pass_template'   => ['type' => 'integer', 'description' => 'Pass template ID'],
-            'member'          => ['type' => 'integer', 'description' => 'Member ID'],
-        ];
-
-        $passFieldFields = [
-            'field_name'       => ['type' => 'string',  'description' => 'Field name'],
-            'value'            => ['type' => 'string',  'description' => 'Field value'],
-            'pass_template'    => ['type' => 'integer', 'description' => 'Pass template ID'],
-            'member_custom_field' => ['type' => 'integer', 'description' => 'Member custom field ID'],
-        ];
-
-        $passTemplateFields = [
-            'name'               => ['type' => 'string',  'description' => 'Template name'],
-            'description'        => ['type' => 'string',  'description' => 'Description'],
-            'pass_type'          => ['type' => 'string',  'description' => 'Pass type (generic/coupon/eventTicket/boardingPass/storeCard)'],
-            'organization_name'  => ['type' => 'string',  'description' => 'Organization name'],
-            'background_color'   => ['type' => 'string',  'description' => 'Background color (hex)'],
-            'foreground_color'   => ['type' => 'string',  'description' => 'Foreground color (hex)'],
-            'label_color'        => ['type' => 'string',  'description' => 'Label color (hex)'],
-            'logo_text'          => ['type' => 'string',  'description' => 'Logo text'],
-            'logo'               => ['type' => 'string',  'description' => 'Logo image (base64 or URL)'],
-        ];
-
-        $passcreatorIntegrationFields = [
-            'passphrase'           => ['type' => 'string',  'description' => 'Passphrase'],
-            'certificate'          => ['type' => 'string',  'description' => 'Certificate (base64)'],
-            'team_identifier'      => ['type' => 'string',  'description' => 'Apple Team Identifier'],
-            'pass_type_identifier' => ['type' => 'string',  'description' => 'Apple Pass Type Identifier'],
-            'is_active'            => ['type' => 'boolean', 'description' => 'Whether active'],
-        ];
-
-        $forumFields = [
-            'name'           => ['type' => 'string',  'description' => 'Forum name'],
-            'description'    => ['type' => 'string',  'description' => 'Forum description'],
-            'is_public'      => ['type' => 'boolean', 'description' => 'Whether publicly visible'],
-            'allowed_groups' => ['type' => 'array',   'description' => 'Allowed group IDs (array)'],
-            'order'          => ['type' => 'integer', 'description' => 'Sort order'],
-        ];
-
-        $topicFields = [
-            'title'        => ['type' => 'string',  'description' => 'Topic title'],
-            'text'         => ['type' => 'string',  'description' => 'Initial post text'],
-            'forum'        => ['type' => 'integer', 'description' => 'Forum ID'],
-            'is_public'    => ['type' => 'boolean', 'description' => 'Whether publicly visible'],
-            'attachments'  => ['type' => 'array',   'description' => 'Attachment IDs (array)'],
-        ];
-
-        $postFields = [
-            'text'        => ['type' => 'string',  'description' => 'Post text'],
-            'topic'       => ['type' => 'integer', 'description' => 'Topic ID'],
-            'attachments' => ['type' => 'array',   'description' => 'Attachment IDs (array)'],
-        ];
-
         $customFieldFields = [
             'name'                  => ['type' => 'string',  'description' => 'Name'],
             'color'                 => ['type' => 'string',  'description' => 'Hex color (e.g. #FF0000)'],
@@ -279,96 +205,6 @@ class MiscTools
             'allow_custom_answers'  => ['type' => 'boolean', 'description' => 'Boolscher Wert'],
             'votes'                 => ['type' => 'integer', 'description' => 'Zahlenwert'],
             'order'                 => ['type' => 'integer', 'description' => 'Sort order'],
-        ];
-
-        $inventoryObjectFields = [
-            'name'                  => ['type' => 'string',  'description' => 'Name'],
-            'identifier'            => ['type' => 'string',  'description' => 'Article/SKU number'],
-            'picture'               => ['type' => 'string',  'description' => 'Pfadwert'],
-            'description'           => ['type' => 'string',  'description' => 'Description'],
-            'pieces'                => ['type' => 'integer', 'description' => 'Quantity in stock'],
-            'price'                 => ['type' => 'number',  'description' => 'Zahlenwert'],
-            'purchase_date'         => ['type' => 'string',  'description' => 'Datumswert'],
-            'location_name'         => ['type' => 'string',  'description' => 'Location name (if no location object)'],
-            'lending_available'     => ['type' => 'boolean', 'description' => 'Boolscher Wert'],
-            'lending_responsible'   => ['type' => 'integer', 'description' => 'Referenzwert'],
-        ];
-
-        $inventoryObjectGroupFields = [
-            'name'  => ['type' => 'string', 'description' => 'Name'],
-            'color' => ['type' => 'string', 'description' => 'Hex color (e.g. #FF0000)'],
-            'short' => ['type' => 'string', 'description' => 'Short code (max 4 chars)'],
-        ];
-
-        $inventoryObjectCustomFieldAssignmentFields = [
-            'custom_field'     => ['type' => 'integer', 'description' => 'Custom field ID'],
-            'value'            => ['type' => 'string',  'description' => 'Field value'],
-            'selected_options' => ['type' => 'array',   'description' => 'Selected option IDs (array)'],
-        ];
-
-        $protocolFields = [
-            'location_object'           => ['type' => 'integer', 'description' => 'Location ID'],
-            'allowed_groups'            => ['type' => 'array',   'description' => 'Allowed group IDs (array)'],
-            'name'                      => ['type' => 'string',  'description' => 'Name'],
-            'location_name'             => ['type' => 'string',  'description' => 'Location name (if no location object)'],
-            'description'               => ['type' => 'string',  'description' => 'Description'],
-            'prologue'                  => ['type' => 'string',  'description' => 'Zeichenwert'],
-            'min_participators'         => ['type' => 'integer', 'description' => 'Minimum participants'],
-            'max_participators'         => ['type' => 'integer', 'description' => 'Maximum participants'],
-            'start_participation'       => ['type' => 'string',  'description' => 'Registration opens at (datetime)'],
-            'end_participation'         => ['type' => 'string',  'description' => 'Registration closes at (datetime)'],
-            'access'                    => ['type' => 'integer', 'description' => 'Access level'],
-            'note'                      => ['type' => 'string',  'description' => 'Zeichenwert'],
-            'start'                     => ['type' => 'string',  'description' => 'Start datetime'],
-            'end'                       => ['type' => 'string',  'description' => 'End datetime'],
-            'all_day'                   => ['type' => 'boolean', 'description' => 'All-day event flag'],
-            'weekdays'                  => ['type' => 'string',  'description' => 'Zeichenwert'],
-            'confirmation_to_addresses' => ['type' => 'array',   'description' => 'Referenzewert'],
-            'send_mail_check'           => ['type' => 'boolean', 'description' => 'Boolscher Wert'],
-            'show_memberarea'           => ['type' => 'boolean', 'description' => 'Boolscher Wert'],
-            'is_public'                 => ['type' => 'boolean', 'description' => 'Whether publicly visible'],
-            'mass_participations'       => ['type' => 'boolean', 'description' => 'Boolscher Wert'],
-            'visible'                   => ['type' => 'boolean', 'description' => 'Visibility flag'],
-            'meeting_leader'            => ['type' => 'string',  'description' => 'Meeting leader name'],
-            'meeting_secretary'         => ['type' => 'string',  'description' => 'Meeting secretary name'],
-            'is_locked'                 => ['type' => 'boolean', 'description' => 'Whether the protocol is locked'],
-        ];
-
-        $protocolElementFields = [
-            'title'             => ['type' => 'string',  'description' => 'Title'],
-            'text'              => ['type' => 'string',  'description' => 'Text content'],
-            'state'             => ['type' => 'string',  'description' => 'State / status'],
-            'order'             => ['type' => 'integer', 'description' => 'Sort order'],
-            'visible_for_export'=> ['type' => 'integer', 'description' => 'Zahlenwert'],
-        ];
-
-        $protocolElementCommentFields = [
-            'title' => ['type' => 'string', 'description' => 'Title'],
-            'text'  => ['type' => 'string', 'description' => 'Text content'],
-        ];
-
-        $protocolUploadFields = [
-            'protocol'              => ['type' => 'integer', 'description' => 'Protocol ID'],
-            'protocol_file'         => ['type' => 'string',  'description' => 'File (base64 or URL)'],
-            'is_public_accessible'  => ['type' => 'boolean', 'description' => 'Whether publicly accessible'],
-            'name'                  => ['type' => 'string',  'description' => 'Name'],
-        ];
-
-        $taskGroupFields = [
-            'name'  => ['type' => 'string', 'description' => 'Name'],
-            'color' => ['type' => 'string', 'description' => 'Hex color (e.g. #FF0000)'],
-            'short' => ['type' => 'string', 'description' => 'Short code (max 4 chars)'],
-        ];
-
-        $lendingFields = [
-            'parent_inventory_object'   => ['type' => 'integer', 'description' => 'Inventory object ID'],
-            'borrow_address'            => ['type' => 'integer', 'description' => 'Borrower address ID'],
-            'borrowing_date'            => ['type' => 'string',  'description' => 'Borrowing date'],
-            'return_date'               => ['type' => 'string',  'description' => 'Return date'],
-            'quantity'                  => ['type' => 'integer', 'description' => 'Quantity'],
-            'borrow_time'               => ['type' => 'string',  'description' => 'Zeitfeld'],
-            'return_time'               => ['type' => 'string',  'description' => 'Zeitfeld'],
-            'state'                     => ['type' => 'string',  'description' => 'State / status'],
         ];
 
         $anniversaryMailingFields = [
@@ -873,28 +709,8 @@ class MiscTools
             // Resources (read-only)
             ['name' => 'listCustomFields',       'uri' => 'easyverein://custom-field/{?limit,page}',       'description' => 'List all custom fields.',         'required' => [],     'props' => $pagination],
             ['name' => 'getCustomField',          'uri' => 'easyverein://custom-field/{id}',                  'description' => 'Get a custom field by ID.',       'required' => ['id'], 'props' => $id],
-            ['name' => 'listTasks',               'uri' => 'easyverein://task/{?limit,page}',                         'description' => 'List all tasks.',                          'required' => [],     'props' => $pagination],
-            ['name' => 'getTask',                 'uri' => 'easyverein://task/{id}',                                   'description' => 'Get a task by ID.',                        'required' => ['id'], 'props' => $id],
-            ['name' => 'listTaskGroups',          'uri' => 'easyverein://task-group/{?limit,page}',                   'description' => 'List all task groups.',                    'required' => [],     'props' => $pagination],
-            ['name' => 'getTaskGroup',            'uri' => 'easyverein://task-group/{id}',                             'description' => 'Get a task group by ID.',                  'required' => ['id'], 'props' => $id],
-            ['name' => 'listTaskComments',        'uri' => 'easyverein://task-comment/{?limit,page}',                 'description' => 'List all task comments.',                  'required' => [],     'props' => $pagination],
-            ['name' => 'getTaskComment',          'uri' => 'easyverein://task-comment/{id}',                           'description' => 'Get a task comment by ID.',                'required' => ['id'], 'props' => $id],
             ['name' => 'listDocumentTemplates',   'uri' => 'easyverein://document-template/{?limit,page}',  'description' => 'List all document templates.',    'required' => [],     'props' => $pagination],
             ['name' => 'getDocumentTemplate',     'uri' => 'easyverein://document-template/{id}',             'description' => 'Get a document template by ID.', 'required' => ['id'], 'props' => $id],
-            ['name' => 'listProtocols',           'uri' => 'easyverein://protocol/{?limit,page}',                     'description' => 'List all protocols.',                      'required' => [],     'props' => $pagination],
-            ['name' => 'getProtocol',             'uri' => 'easyverein://protocol/{id}',                               'description' => 'Get a protocol by ID.',                    'required' => ['id'], 'props' => $id],
-            ['name' => 'listProtocolElements',    'uri' => 'easyverein://protocol-element/{?limit,page}',             'description' => 'List all protocol elements.',              'required' => [],     'props' => $pagination],
-            ['name' => 'getProtocolElement',      'uri' => 'easyverein://protocol-element/{id}',                       'description' => 'Get a protocol element by ID.',            'required' => ['id'], 'props' => $id],
-            ['name' => 'listProtocolElementComments', 'uri' => 'easyverein://protocol-element-comment/{?limit,page}', 'description' => 'List all protocol element comments.',      'required' => [],     'props' => $pagination],
-            ['name' => 'getProtocolElementComment',   'uri' => 'easyverein://protocol-element-comment/{id}',          'description' => 'Get a protocol element comment by ID.',   'required' => ['id'], 'props' => $id],
-            ['name' => 'listProtocolUploads',     'uri' => 'easyverein://protocol-upload/{?limit,page}',              'description' => 'List all protocol uploads.',               'required' => [],     'props' => $pagination],
-            ['name' => 'getProtocolUpload',       'uri' => 'easyverein://protocol-upload/{id}',                        'description' => 'Get a protocol upload by ID.',             'required' => ['id'], 'props' => $id],
-            ['name' => 'listInventoryObjects',    'uri' => 'easyverein://inventory-object/{?limit,page}',   'description' => 'List all inventory objects.',     'required' => [],     'props' => $pagination],
-            ['name' => 'getInventoryObject',      'uri' => 'easyverein://inventory-object/{id}',              'description' => 'Get an inventory object by ID.', 'required' => ['id'], 'props' => $id],
-            ['name' => 'listInventoryObjectGroups',    'uri' => 'easyverein://inventory-object-group/{?limit,page}',   'description' => 'List all inventory object groups.',     'required' => [],     'props' => $pagination],
-            ['name' => 'getInventoryObjectGroup',      'uri' => 'easyverein://inventory-object-group/{id}',              'description' => 'Get an inventory object group by ID.', 'required' => ['id'], 'props' => $id],
-            ['name' => 'listInventoryObjectCustomFieldAssignments', 'uri' => 'easyverein://inventory-object-custom-field-assignment/{?limit,page,inventory_object}', 'description' => 'List inventory object custom field assignments.', 'required' => [], 'props' => $pagination + ['inventory_object' => ['type' => 'integer', 'description' => 'Filter by inventory object ID']]],
-            ['name' => 'getInventoryObjectCustomFieldAssignment',   'uri' => 'easyverein://inventory-object-custom-field-assignment/{id}', 'description' => 'Get an inventory object custom field assignment by ID.', 'required' => ['id'], 'props' => $id],
             ['name' => 'listCalendars',           'uri' => 'easyverein://calendar/{?limit,page}',           'description' => 'List all calendars.',             'required' => [],     'props' => $pagination],
             ['name' => 'getCalendar',             'uri' => 'easyverein://calendar/{id}',                      'description' => 'Get a calendar by ID.',           'required' => ['id'], 'props' => $id],
             ['name' => 'listLocations',           'uri' => 'easyverein://location/{?limit,page}',           'description' => 'List all locations.',             'required' => [],     'props' => $pagination],
@@ -919,38 +735,9 @@ class MiscTools
             ['name' => 'createCustomField',        'description' => 'Create a custom field.',          'required' => [],     'props' => $customFieldFields],
             ['name' => 'updateCustomField',        'description' => 'Update a custom field.',          'required' => ['id'], 'props' => $id + $customFieldFields],
             ['name' => 'deleteCustomField',        'description' => 'Delete a custom field.',          'required' => ['id'], 'props' => $id],
-            ['name' => 'createTask',               'description' => 'Create a new task.',              'required' => [],     'props' => $taskFields],
-            ['name' => 'updateTask',               'description' => 'Update a task.',                  'required' => ['id'], 'props' => $id + $taskFields],
-            ['name' => 'deleteTask',               'description' => 'Delete a task.',                  'required' => ['id'],         'props' => $id],
-            ['name' => 'createTaskGroup',          'description' => 'Create a new task group.',        'required' => [],     'props' => $taskGroupFields],
-            ['name' => 'updateTaskGroup',          'description' => 'Update a task group.',            'required' => ['id'], 'props' => $id + $taskGroupFields],
-            ['name' => 'deleteTaskGroup',          'description' => 'Delete a task group.',            'required' => ['id'], 'props' => $id],
-            ['name' => 'createTaskComment',        'description' => 'Create a task comment.',          'required' => [],     'props' => $taskCommentFields],
-            ['name' => 'updateTaskComment',        'description' => 'Update a task comment.',          'required' => ['id'], 'props' => $id + $taskCommentFields],
-            ['name' => 'deleteTaskComment',        'description' => 'Delete a task comment.',          'required' => ['id'],         'props' => $id],
             ['name' => 'createDocumentTemplate',   'description' => 'Create a new document template.', 'required' => [], 'props' => $documentTemplateFields],
             ['name' => 'updateDocumentTemplate',   'description' => 'Update a document template.',     'required' => ['id'], 'props' => $id + $documentTemplateFields],
             ['name' => 'deleteDocumentTemplate',   'description' => 'Delete a document template.',     'required' => ['id'],         'props' => $id],
-            ['name' => 'createProtocol',           'description' => 'Create a new protocol.',                   'required' => [],     'props' => $protocolFields],
-            ['name' => 'updateProtocol',           'description' => 'Update a protocol.',                       'required' => ['id'], 'props' => $id + $protocolFields],
-            ['name' => 'deleteProtocol',           'description' => 'Delete a protocol.',                       'required' => ['id'], 'props' => $id],
-            ['name' => 'createProtocolElement',    'description' => 'Create a new protocol element.',           'required' => [],     'props' => $protocolElementFields],
-            ['name' => 'updateProtocolElement',    'description' => 'Update a protocol element.',               'required' => ['id'], 'props' => $id + $protocolElementFields],
-            ['name' => 'deleteProtocolElement',    'description' => 'Delete a protocol element.',               'required' => ['id'], 'props' => $id],
-            ['name' => 'createProtocolElementComment', 'description' => 'Create a protocol element comment.',  'required' => [],     'props' => $protocolElementCommentFields],
-            ['name' => 'updateProtocolElementComment', 'description' => 'Update a protocol element comment.',  'required' => ['id'], 'props' => $id + $protocolElementCommentFields],
-            ['name' => 'deleteProtocolElementComment', 'description' => 'Delete a protocol element comment.',  'required' => ['id'], 'props' => $id],
-            ['name' => 'createProtocolUpload',     'description' => 'Upload a file to a protocol.',             'required' => [],     'props' => $protocolUploadFields],
-            ['name' => 'deleteProtocolUpload',     'description' => 'Delete a protocol upload.',                'required' => ['id'], 'props' => $id],
-            ['name' => 'createInventoryObject',    'description' => 'Create an inventory object.',     'required' => [],     'props' => $inventoryObjectFields],
-            ['name' => 'updateInventoryObject',    'description' => 'Update an inventory object.',     'required' => ['id'], 'props' => $id + $inventoryObjectFields],
-            ['name' => 'deleteInventoryObject',    'description' => 'Delete an inventory object.',     'required' => ['id'], 'props' => $id],
-            ['name' => 'createInventoryObjectGroup',    'description' => 'Create an inventory object group.',  'required' => [],     'props' => $inventoryObjectGroupFields],
-            ['name' => 'updateInventoryObjectGroup',    'description' => 'Update an inventory object group.',  'required' => ['id'], 'props' => $id + $inventoryObjectGroupFields],
-            ['name' => 'deleteInventoryObjectGroup',    'description' => 'Delete an inventory object group.',  'required' => ['id'], 'props' => $id],
-            ['name' => 'createInventoryObjectCustomFieldAssignment', 'description' => 'Create an inventory object custom field assignment.', 'required' => [],     'props' => $inventoryObjectCustomFieldAssignmentFields],
-            ['name' => 'updateInventoryObjectCustomFieldAssignment', 'description' => 'Update an inventory object custom field assignment.', 'required' => ['id'], 'props' => $id + $inventoryObjectCustomFieldAssignmentFields],
-            ['name' => 'deleteInventoryObjectCustomFieldAssignment', 'description' => 'Delete an inventory object custom field assignment.', 'required' => ['id'], 'props' => $id],
             ['name' => 'createCalendar',           'description' => 'Create a new calendar.',          'required' => [],     'props' => $calendarFields],
             ['name' => 'updateCalendar',           'description' => 'Update a calendar.',              'required' => ['id'], 'props' => $id + $calendarFields],
             ['name' => 'deleteCalendar',           'description' => 'Delete a calendar.',              'required' => ['id'], 'props' => $id],
@@ -1022,9 +809,6 @@ class MiscTools
             // dosb-sport
             ['name' => 'listDosbSports',           'uri' => 'easyverein://dosb-sport/{?limit,page}',                'description' => 'List all DOSB sport entries.',                'required' => [],     'props' => $pagination],
             ['name' => 'getDosbSport',             'uri' => 'easyverein://dosb-sport/{id}',                          'description' => 'Get a DOSB sport entry by ID.',               'required' => ['id'], 'props' => $id],
-            // lending
-            ['name' => 'listLendings',             'uri' => 'easyverein://lending/{?limit,page}',                   'description' => 'List all lendings.',                          'required' => [],     'props' => $pagination],
-            ['name' => 'getLending',               'uri' => 'easyverein://lending/{id}',                             'description' => 'Get a lending by ID.',                        'required' => ['id'], 'props' => $id],
             // file-system-path
             ['name' => 'listFileSystemPaths',      'uri' => 'easyverein://file-system-path/{?limit,page}',          'description' => 'List all file system paths.',                 'required' => [],     'props' => $pagination],
             ['name' => 'getFileSystemPath',        'uri' => 'easyverein://file-system-path/{id}',                    'description' => 'Get a file system path by ID.',               'required' => ['id'], 'props' => $id],
@@ -1102,9 +886,6 @@ class MiscTools
             ['name' => 'createDosbSport',          'description' => 'Create a DOSB sport entry.',                   'required' => [],     'props' => $dosbSportFields],
             ['name' => 'updateDosbSport',          'description' => 'Update a DOSB sport entry.',                   'required' => ['id'], 'props' => $id + $dosbSportFields],
             ['name' => 'deleteDosbSport',          'description' => 'Delete a DOSB sport entry.',                   'required' => ['id'], 'props' => $id],
-            ['name' => 'createLending',            'description' => 'Create a lending.',                            'required' => [],     'props' => $lendingFields],
-            ['name' => 'updateLending',            'description' => 'Update a lending.',                            'required' => ['id'], 'props' => $id + $lendingFields],
-            ['name' => 'deleteLending',            'description' => 'Delete a lending.',                            'required' => ['id'], 'props' => $id],
             ['name' => 'createFileSystemPath',     'description' => 'Create a file system path.',                   'required' => [], 'props' => $fileSystemPathFields],
             ['name' => 'updateFileSystemPath',     'description' => 'Update a file system path.',                   'required' => ['id'], 'props' => $id + $fileSystemPathFields],
             ['name' => 'deleteFileSystemPath',     'description' => 'Delete a file system path.',                   'required' => ['id'],         'props' => $id],
@@ -1136,60 +917,11 @@ class MiscTools
             'createCustomField'     => $this->client->post($p['token'], '/custom-field/', $this->bodyFrom($p, ['name', 'color', 'short', 'settings_type', 'kind', 'description', 'additional', 'member_show', 'member_edit', 'member_dsgvo', 'position', 'collection', 'needs_admin_approval'])),
             'updateCustomField'     => $this->client->patch($p['token'], '/custom-field/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'color', 'short', 'settings_type', 'kind', 'description', 'additional', 'member_show', 'member_edit', 'member_dsgvo', 'position', 'collection', 'needs_admin_approval'])),
             'deleteCustomField'     => $this->deleted($p['token'], '/custom-field/' . $p['id'] . '/', 'CustomField'),
-            'listTasks'              => $this->client->get($p['token'], '/task/', $this->pagination($p)),
-            'getTask'                => $this->client->get($p['token'], '/task/' . $p['id'] . '/'),
-            'createTask'             => $this->client->post($p['token'], '/task/', $this->bodyFrom($p, ['name', 'description', 'due_date', 'completed', 'assigned_to', 'task_group', 'attachments'])),
-            'updateTask'             => $this->client->patch($p['token'], '/task/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'description', 'due_date', 'completed', 'assigned_to', 'task_group', 'attachments'])),
-            'deleteTask'             => $this->deleted($p['token'], '/task/' . $p['id'] . '/', 'Task'),
-            'listTaskGroups'         => $this->client->get($p['token'], '/task-group/', $this->pagination($p)),
-            'getTaskGroup'           => $this->client->get($p['token'], '/task-group/' . $p['id'] . '/'),
-            'createTaskGroup'        => $this->client->post($p['token'], '/task-group/', $this->bodyFrom($p, ['name', 'color', 'short'])),
-            'updateTaskGroup'        => $this->client->patch($p['token'], '/task-group/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'color', 'short'])),
-            'deleteTaskGroup'        => $this->deleted($p['token'], '/task-group/' . $p['id'] . '/', 'TaskGroup'),
-            'listTaskComments'       => $this->client->get($p['token'], '/task-comment/', $this->pagination($p)),
-            'getTaskComment'         => $this->client->get($p['token'], '/task-comment/' . $p['id'] . '/'),
-            'createTaskComment'      => $this->client->post($p['token'], '/task-comment/', $this->bodyFrom($p, ['text', 'task'])),
-            'updateTaskComment'      => $this->client->patch($p['token'], '/task-comment/' . $p['id'] . '/', $this->bodyFrom($p, ['text', 'task'])),
-            'deleteTaskComment'      => $this->deleted($p['token'], '/task-comment/' . $p['id'] . '/', 'TaskComment'),
             'listDocumentTemplates' => $this->client->get($p['token'], '/document-template/', $this->pagination($p)),
             'getDocumentTemplate'   => $this->client->get($p['token'], '/document-template/' . $p['id'] . '/'),
             'createDocumentTemplate'=> $this->client->post($p['token'], '/document-template/', $this->bodyFrom($p, ['name', 'description', 'content', 'is_active'])),
             'updateDocumentTemplate'=> $this->client->patch($p['token'], '/document-template/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'description', 'content', 'is_active'])),
             'deleteDocumentTemplate'=> $this->deleted($p['token'], '/document-template/' . $p['id'] . '/', 'DocumentTemplate'),
-            'listProtocols'              => $this->client->get($p['token'], '/protocol/', $this->pagination($p)),
-            'getProtocol'                => $this->client->get($p['token'], '/protocol/' . $p['id'] . '/'),
-            'createProtocol'             => $this->client->post($p['token'], '/protocol/', $this->bodyFrom($p, ['location_object', 'allowed_groups', 'name', 'location_name', 'description', 'prologue', 'min_participators', 'max_participators', 'start_participation', 'end_participation', 'access', 'note', 'start', 'end', 'all_day', 'weekdays', 'confirmation_to_addresses', 'send_mail_check', 'show_memberarea', 'is_public', 'mass_participations', 'visible', 'meeting_leader', 'meeting_secretary', 'is_locked'])),
-            'updateProtocol'             => $this->client->patch($p['token'], '/protocol/' . $p['id'] . '/', $this->bodyFrom($p, ['location_object', 'allowed_groups', 'name', 'location_name', 'description', 'prologue', 'min_participators', 'max_participators', 'start_participation', 'end_participation', 'access', 'note', 'start', 'end', 'all_day', 'weekdays', 'confirmation_to_addresses', 'send_mail_check', 'show_memberarea', 'is_public', 'mass_participations', 'visible', 'meeting_leader', 'meeting_secretary', 'is_locked'])),
-            'deleteProtocol'             => $this->deleted($p['token'], '/protocol/' . $p['id'] . '/', 'Protocol'),
-            'listProtocolElements'       => $this->client->get($p['token'], '/protocol-element/', $this->pagination($p)),
-            'getProtocolElement'         => $this->client->get($p['token'], '/protocol-element/' . $p['id'] . '/'),
-            'createProtocolElement'      => $this->client->post($p['token'], '/protocol-element/', $this->bodyFrom($p, ['title', 'text', 'state', 'order', 'visible_for_export'])),
-            'updateProtocolElement'      => $this->client->patch($p['token'], '/protocol-element/' . $p['id'] . '/', $this->bodyFrom($p, ['title', 'text', 'state', 'order', 'visible_for_export'])),
-            'deleteProtocolElement'      => $this->deleted($p['token'], '/protocol-element/' . $p['id'] . '/', 'ProtocolElement'),
-            'listProtocolElementComments'   => $this->client->get($p['token'], '/protocol-element-comment/', $this->pagination($p)),
-            'getProtocolElementComment'     => $this->client->get($p['token'], '/protocol-element-comment/' . $p['id'] . '/'),
-            'createProtocolElementComment'  => $this->client->post($p['token'], '/protocol-element-comment/', $this->bodyFrom($p, ['title', 'text'])),
-            'updateProtocolElementComment'  => $this->client->patch($p['token'], '/protocol-element-comment/' . $p['id'] . '/', $this->bodyFrom($p, ['title', 'text'])),
-            'deleteProtocolElementComment'  => $this->deleted($p['token'], '/protocol-element-comment/' . $p['id'] . '/', 'ProtocolElementComment'),
-            'listProtocolUploads'        => $this->client->get($p['token'], '/protocol-upload/', $this->pagination($p)),
-            'getProtocolUpload'          => $this->client->get($p['token'], '/protocol-upload/' . $p['id'] . '/'),
-            'createProtocolUpload'       => $this->client->post($p['token'], '/protocol-upload/', $this->bodyFrom($p, ['protocol', 'protocol_file', 'is_public_accessible', 'name'])),
-            'deleteProtocolUpload'       => $this->deleted($p['token'], '/protocol-upload/' . $p['id'] . '/', 'ProtocolUpload'),
-            'listInventoryObjects'  => $this->client->get($p['token'], '/inventory-object/', $this->pagination($p)),
-            'getInventoryObject'    => $this->client->get($p['token'], '/inventory-object/' . $p['id'] . '/'),
-            'createInventoryObject' => $this->client->post($p['token'], '/inventory-object/', $this->bodyFrom($p, ['name', 'identifier', 'picture', 'description', 'pieces', 'price', 'purchase_date', 'location_name', 'lending_available', 'lending_responsible'])),
-            'updateInventoryObject' => $this->client->patch($p['token'], '/inventory-object/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'identifier', 'picture', 'description', 'pieces', 'price', 'purchase_date', 'location_name', 'lending_available', 'lending_responsible'])),
-            'deleteInventoryObject' => $this->deleted($p['token'], '/inventory-object/' . $p['id'] . '/', 'InventoryObject'),
-            'listInventoryObjectGroups'    => $this->client->get($p['token'], '/inventory-object-group/', $this->pagination($p)),
-            'getInventoryObjectGroup'      => $this->client->get($p['token'], '/inventory-object-group/' . $p['id'] . '/'),
-            'createInventoryObjectGroup'   => $this->client->post($p['token'], '/inventory-object-group/', $this->bodyFrom($p, ['name', 'color', 'short'])),
-            'updateInventoryObjectGroup'   => $this->client->patch($p['token'], '/inventory-object-group/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'color', 'short'])),
-            'deleteInventoryObjectGroup'   => $this->deleted($p['token'], '/inventory-object-group/' . $p['id'] . '/', 'InventoryObjectGroup'),
-            'listInventoryObjectCustomFieldAssignments' => $this->client->get($p['token'], '/inventory-object-custom-field-assignment/', $this->pagination($p) + $this->optional($p, 'inventory_object')),
-            'getInventoryObjectCustomFieldAssignment'   => $this->client->get($p['token'], '/inventory-object-custom-field-assignment/' . $p['id'] . '/'),
-            'createInventoryObjectCustomFieldAssignment'=> $this->client->post($p['token'], '/inventory-object-custom-field-assignment/', $this->bodyFrom($p, ['custom_field', 'value', 'selected_options'])),
-            'updateInventoryObjectCustomFieldAssignment'=> $this->client->patch($p['token'], '/inventory-object-custom-field-assignment/' . $p['id'] . '/', $this->bodyFrom($p, ['custom_field', 'value', 'selected_options'])),
-            'deleteInventoryObjectCustomFieldAssignment'=> $this->deleted($p['token'], '/inventory-object-custom-field-assignment/' . $p['id'] . '/', 'InventoryObjectCustomFieldAssignment'),
             'listCalendars'         => $this->client->get($p['token'], '/calendar/', $this->pagination($p)),
             'getCalendar'           => $this->client->get($p['token'], '/calendar/' . $p['id'] . '/'),
             'createCalendar'        => $this->client->post($p['token'], '/calendar/', $this->bodyFrom($p, ['name', 'color', 'short', 'allowed_groups', 'calendar_import_url', 'delete_events_after_deletion'])),
@@ -1315,11 +1047,6 @@ class MiscTools
             'createDosbSport'         => $this->client->post($p['token'], '/dosb-sport/', $this->bodyFrom($p, ['title', 'sport_number', 'federation_number'])),
             'updateDosbSport'         => $this->client->patch($p['token'], '/dosb-sport/' . $p['id'] . '/', $this->bodyFrom($p, ['title', 'sport_number', 'federation_number'])),
             'deleteDosbSport'         => $this->deleted($p['token'], '/dosb-sport/' . $p['id'] . '/', 'DosbSport'),
-            'listLendings'            => $this->client->get($p['token'], '/lending/', $this->pagination($p)),
-            'getLending'              => $this->client->get($p['token'], '/lending/' . $p['id'] . '/'),
-            'createLending'           => $this->client->post($p['token'], '/lending/', $this->bodyFrom($p, ['parent_inventory_object', 'borrow_address', 'borrowing_date', 'return_date', 'quantity', 'borrow_time', 'return_time', 'state'])),
-            'updateLending'           => $this->client->patch($p['token'], '/lending/' . $p['id'] . '/', $this->bodyFrom($p, ['parent_inventory_object', 'borrow_address', 'borrowing_date', 'return_date', 'quantity', 'borrow_time', 'return_time', 'state'])),
-            'deleteLending'           => $this->deleted($p['token'], '/lending/' . $p['id'] . '/', 'Lending'),
             'listFileSystemPaths'     => $this->client->get($p['token'], '/file-system-path/', $this->pagination($p)),
             'getFileSystemPath'       => $this->client->get($p['token'], '/file-system-path/' . $p['id'] . '/'),
             'createFileSystemPath'    => $this->client->post($p['token'], '/file-system-path/', $this->bodyFrom($p, ['name', 'path', 'type'])),
@@ -1355,33 +1082,4 @@ class MiscTools
         };
     }
 
-    private function bodyFrom(array $p, array $fields): string
-    {
-        $body = [];
-        foreach ($fields as $field) {
-            if (array_key_exists($field, $p)) {
-                $body[$field] = $p[$field];
-            }
-        }
-        return json_encode($body);
-    }
-
-    private function pagination(array $p): array
-    {
-        $q = [];
-        if (isset($p['limit']))  $q['limit']  = $p['limit'];
-        if (isset($p['page']))   $q['page']   = $p['page'];
-        return $q;
-    }
-
-    private function optional(array $p, string $key): array
-    {
-        return isset($p[$key]) ? [$key => $p[$key]] : [];
-    }
-
-    private function deleted(string $token, string $path, string $label): string
-    {
-        $this->client->delete($token, $path);
-        return json_encode(['message' => "$label deleted."]);
-    }
 }

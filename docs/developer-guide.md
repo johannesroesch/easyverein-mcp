@@ -26,8 +26,11 @@ src/
     ├── EventTools.php           ~25 Tools
     ├── FinanceTools.php         ~52 Tools
     ├── ForumTools.php           ~15 Tools
-    ├── MiscTools.php            ~160 Tools
-    └── PasscreatorTools.php     ~17 Tools
+    ├── PasscreatorTools.php     ~17 Tools
+    ├── TaskTools.php            ~13 Tools (task, task-group, task-comment)
+    ├── ProtocolTools.php        ~19 Tools (protocol, protocol-element, protocol-upload)
+    ├── InventoryTools.php       ~16 Tools (inventory-object, lending)
+    └── MiscTools.php            ~110 Tools
 ```
 
 ---
@@ -179,7 +182,7 @@ $mock = new MockHttpClient([
 $client = new ApiClient('https://example.com/api/v3.0', $mock);
 ```
 
-`MockHttpClient` steht in `tests/Fixtures/` und gibt vorbereitete Responses sequenziell zurück.
+`MockHttpClient` steht in `tests/MockHttpClient.php` und implementiert `HttpClientInterface`:
 
 ### ExitException
 

@@ -57,18 +57,22 @@ src/
     │                             cancellation, discount-code
     ├── ForumTools.php          – forum, topic, post
     ├── PasscreatorTools.php    – pass, pass-field, pass-template, passcreator-integration
-    └── MiscTools.php           – custom-field, task, task-group, task-comment,
-                                  document-template, protocol, protocol-element,
-                                  inventory-object, calendar, location, voting,
-                                  organization, wastebasket, accounting-plan,
+    ├── TaskTools.php           – task, task-group, task-comment
+    ├── ProtocolTools.php       – protocol, protocol-element, protocol-element-comment,
+    │                             protocol-upload
+    ├── InventoryTools.php      – inventory-object, inventory-object-group,
+    │                             inventory-object-custom-field-assignment, lending
+    └── MiscTools.php           – custom-field, document-template, calendar, location,
+                                  voting, organization, wastebasket, accounting-plan,
                                   price-group, notification-log, select-option,
-                                  oauth2, smtp, chairman, lending, and more (~160 tools)
+                                  oauth2, smtp, chairman, and more (~110 tools)
 
 tests/
 ├── bootstrap.php
 ├── MockHttpClient.php          – HttpClientInterface implementation for tests
 ├── Fixtures/                   – JSON fixtures for tests
 ├── Unit/                       – Unit tests (ApiClient, Logger, Tools, etc.)
+│   └── Tools/                  – One test class per *Tools class
 └── Integration/                – Integration tests (McpServer JSON-RPC flows)
 ```
 

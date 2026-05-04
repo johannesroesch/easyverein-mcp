@@ -19,9 +19,17 @@ Für den integrierten PHP-Dev-Server wird kein Webserver benötigt. Für den Pro
 ## Installation
 
 ```bash
-git clone <repo-url> easyverein-mcp
+git clone https://github.com/johannesroesch/easyverein-mcp easyverein-mcp
 cd easyverein-mcp
 composer install --no-dev --optimize-autoloader
+cp .env.example .env
+```
+
+Alternativ lässt sich das vorkompilierte Release-Archiv von der [GitHub Releases-Seite](https://github.com/johannesroesch/easyverein-mcp/releases/latest) herunterladen. Es enthält bereits `vendor/` — `composer install` entfällt dann.
+
+```bash
+unzip easyverein-mcp-v*.zip -d easyverein-mcp
+cd easyverein-mcp
 cp .env.example .env
 ```
 
