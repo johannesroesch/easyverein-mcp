@@ -4,62 +4,106 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project does
 
-MCP (Model Context Protocol) server that exposes the [EasyVerein API v3.0](https://easyverein.com/api/v3.0/documentation) as MCP tools. Claude or any MCP-compatible client can call these tools to manage a Vereinsverwaltung (club management system).
+MCP (Model Context Protocol) server that exposes the [EasyVerein API v3.0](https://easyverein.com/api/v3.0/documentation) as MCP tools, resources, and prompts. Claude or any MCP-compatible client can manage a Vereinsverwaltung (club management system) via natural language.
 
-**Token model:** The server has no stored credentials. Every MCP tool call requires the caller to supply a `token` parameter containing the user's EasyVerein API token. The server forwards it as `Authorization: Token <token>`.
+**Token model:** The server stores no credentials. Every request requires a valid EasyVerein API token:
+- HTTP transports: `Authorization: Bearer <token>` header
+- stdio: `EASYVEREIN_TOKEN` environment variable
+
+The token is forwarded as `Authorization: Bearer <token>` to the EasyVerein API and discarded after the request.
 
 ## Commands
 
 ```sh
-composer install                      # Install dependencies
-php -S localhost:8080 -t public/      # Start dev server (MCP on :8080)
-cp .env.example .env                  # Copy env config (adjust base URL if needed)
+composer install                                          # Install dependencies
+cp .env.example .env                                      # Copy env config
+PHP_CLI_SERVER_WORKERS=4 php -S localhost:8080 -t public/ # Start dev server
+php vendor/bin/phpunit                                    # Run all tests
+php vendor/bin/phpunit --testsuite Unit                   # Unit tests only
+php vendor/bin/phpunit --testsuite Integration            # Integration tests only
 ```
+
+> `PHP_CLI_SERVER_WORKERS=4` is required for the elicitation (delete confirmation) flow to work correctly — the polling loop needs a second worker to receive the user's response.
 
 ## Architecture
 
 ```
-public/index.php       – Slim entry point; defines GET /sse and POST /messages routes
-  │
-  ├── src/
-  │     ├── ApiClient.php    – thin cURL proxy (get/post/patch/delete) that injects
-  │     │                      the per-call token as Authorization header
-  │     ├── McpServer.php    – MCP protocol: tool registry, SSE handshake,
-  │     │                      JSON-RPC 2.0 dispatch (initialize / tools/list / tools/call)
-  │     └── Tools/
-  │           ├── MemberTools.php         – member, member-group, member-group-assignment
-  │           ├── ContactDetailsTools.php – contact-details, contact-details-group
-  │           ├── EventTools.php          – event, participation
-  │           ├── FinanceTools.php        – booking, invoice, invoice-item, bank-account, booking-project
-  │           ├── ForumTools.php          – forum, topic, post
-  │           └── MiscTools.php           – custom-field, task, document-template, protocol,
-  │                                         inventory-object, calendar, location, voting,
-  │                                         organization, wastebasket, accounting-plan, notification-log
-  └── .env.example           – EASYVEREIN_BASE_URL configuration
+public/index.php          – Slim 4 entry point; HTTP routing for all three transports
+bin/mcp-stdio.php         – stdio entry point
+
+src/
+├── McpServer.php         – MCP protocol: JSON-RPC dispatch, session management,
+│                           tool/resource/prompt registry, elicitation flow
+├── ApiClient.php         – cURL proxy (get/post/patch/delete); injects Bearer token;
+│                           handles rate limiting (HTTP 429 with auto-retry)
+├── HttpClientInterface.php  – Abstraction over HTTP calls (injectable for testing)
+├── CurlHttpClient.php    – Production implementation via cURL
+├── Logger.php            – Structured JSON logger (NDJSON → stderr)
+│                           Fields: ts, level, msg, req, transport, sess
+├── PromptRegistry.php    – 15 guided workflows (prompts/list, prompts/get)
+├── AuthException.php     – Thrown on HTTP 401/403
+├── ExitException.php     – Replaces exit() for testability (elicitation flow)
+├── RateLimitException.php – Thrown on second consecutive HTTP 429
+└── Tools/
+    ├── MemberTools.php         – member, member-group, member-group-assignment,
+    │                             member custom fields & change requests
+    ├── ContactDetailsTools.php – contact-details, contact-details-groups,
+    │                             change requests, logs, custom fields, former member data
+    ├── EventTools.php          – event, participation, event custom fields,
+    │                             application-form, application-form-element
+    ├── FinanceTools.php        – booking, invoice, invoice-item, bank-account,
+    │                             booking-project, billing-account, tax-rate, debit-order,
+    │                             payment-method, participation-price-group,
+    │                             cancellation, discount-code
+    ├── ForumTools.php          – forum, topic, post
+    ├── PasscreatorTools.php    – pass, pass-field, pass-template, passcreator-integration
+    └── MiscTools.php           – custom-field, task, task-group, task-comment,
+                                  document-template, protocol, protocol-element,
+                                  inventory-object, calendar, location, voting,
+                                  organization, wastebasket, accounting-plan,
+                                  price-group, notification-log, select-option,
+                                  oauth2, smtp, chairman, lending, and more (~160 tools)
+
+tests/
+├── bootstrap.php
+├── MockHttpClient.php          – HttpClientInterface implementation for tests
+├── Fixtures/                   – JSON fixtures for tests
+├── Unit/                       – Unit tests (ApiClient, Logger, Tools, etc.)
+└── Integration/                – Integration tests (McpServer JSON-RPC flows)
 ```
+
+## Transports
+
+| Transport | Protocol | Entry point |
+|-----------|----------|-------------|
+| Streamable HTTP (recommended) | 2025-11-25 | `POST /mcp` |
+| HTTP + SSE (legacy) | 2024-11-05 | `GET /sse` + `POST /messages` |
+| stdio | — | `bin/mcp-stdio.php` |
 
 ## Key conventions
 
-- Each `*Tools` class exposes `getDefinitions(): array` (tool name + inputSchema) and `dispatch(string $name, array $params): string`.
+- Each `*Tools` class exposes `getDefinitions(): array` (tool name + inputSchema + optional `uri` for resources) and `dispatch(string $name, array $params): string`.
 - `McpServer` aggregates all tool classes and handles MCP routing.
 - API responses are returned as raw JSON strings (the LLM parses them).
 - All API calls go through `ApiClient`; never use cURL directly in a tool class.
-- Optional parameters are only forwarded when present in `$params`.
-
-## MCP transport
-
-HTTP/SSE on port 8080 (configurable via your web server).
-- `GET  /sse`      – opens the SSE stream and sends the `endpoint` event
-- `POST /messages` – receives JSON-RPC 2.0 requests, returns JSON responses
+- Optional parameters are only included in the request body when present in `$params` — never send `null`.
+- Reference fields (hyperlinked relations) must be full URLs, not integer IDs. Use `ApiClient::urlRef(string $path, int $id): string` and the `$urlFields` parameter in `bodyFrom()`.
 
 ## Adding new tools
 
 1. Add entries in `getDefinitions()` and a `match` arm in `dispatch()` in the appropriate `*Tools` class (or create a new one).
-2. If creating a new class, instantiate it in `McpServer::__construct()`.
+2. If creating a new class, instantiate it in `McpServer::__construct()` and add it to `$toolClasses`.
 3. No other wiring needed.
+
+To also expose a tool as a read-only **resource**, add a `uri` key to the definition:
+```php
+'uri' => 'easyverein://my-entity/{id}',        // single object
+'uri' => 'easyverein://my-entity{?limit,page}', // list (URI template)
+```
 
 ## EasyVerein API reference
 
 Base URL: `https://easyverein.com/api/v3.0`  
 All list endpoints support `limit` and `offset` query params for pagination.  
-All mutating operations accept/return JSON. PATCH is used for partial updates.
+Mutating operations use POST (create) and PATCH (partial update).  
+Reference fields expect full hyperlinked URLs (DRF style), not integer IDs.
