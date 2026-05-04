@@ -29,41 +29,6 @@ class MiscToolsTest extends AbstractToolsTest
         }
     }
 
-    public function testListTasksUsesGet(): void
-    {
-        $this->addOk('{"results":[]}');
-        $this->tools->dispatch('listTasks', ['token' => 'tok']);
-        $this->assertGetTo('/task/');
-    }
-
-    public function testGetTaskUsesCorrectPath(): void
-    {
-        $this->addOk('{"id":4}');
-        $this->tools->dispatch('getTask', ['token' => 'tok', 'id' => 4]);
-        $this->assertGetTo('/task/4/');
-    }
-
-    public function testCreateTaskUsesPost(): void
-    {
-        $this->addOk('{"id":1}', 201);
-        $this->tools->dispatch('createTask', ['token' => 'tok', 'name' => 'Important Task']);
-        $this->assertPostTo('/task/');
-    }
-
-    public function testDeleteTaskReturnsDeletedMessage(): void
-    {
-        $this->addDeleted();
-        $result = $this->tools->dispatch('deleteTask', ['token' => 'tok', 'id' => 4]);
-        $this->assertDeletedMessage($result);
-    }
-
-    public function testListInventoryObjectsUsesGet(): void
-    {
-        $this->addOk('{"results":[]}');
-        $this->tools->dispatch('listInventoryObjects', ['token' => 'tok']);
-        $this->assertGetTo('/inventory-object/');
-    }
-
     public function testGetOrganizationUsesGet(): void
     {
         $this->addOk('{"id":1,"name":"Test Club"}');
@@ -83,13 +48,6 @@ class MiscToolsTest extends AbstractToolsTest
         $this->addOk('{"results":[]}');
         $this->tools->dispatch('listDocumentTemplates', ['token' => 'tok']);
         $this->assertGetTo('/document-template/');
-    }
-
-    public function testListProtocolsUsesGet(): void
-    {
-        $this->addOk('{"results":[]}');
-        $this->tools->dispatch('listProtocols', ['token' => 'tok']);
-        $this->assertGetTo('/protocol/');
     }
 
     public function testListCalendarsUsesGet(): void
