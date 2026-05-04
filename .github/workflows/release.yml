@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Test before release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: curl, mbstring
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run tests
+        run: composer test
+
+  release:
+    name: Create GitHub Release
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: curl, mbstring
+          coverage: none
+
+      - name: Install production dependencies
+        run: composer install --no-dev --optimize-autoloader --no-progress --prefer-dist
+
+      - name: Build release archive
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          ARCHIVE="easyverein-mcp-${VERSION}.zip"
+          zip -r "${ARCHIVE}" \
+            bin/ \
+            docs/ \
+            public/ \
+            src/ \
+            vendor/ \
+            composer.json \
+            composer.lock \
+            .env.example \
+            README.md \
+            CLAUDE.md
+          echo "ARCHIVE=${ARCHIVE}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | sed -n '2p')
+          if [ -z "$PREV_TAG" ]; then
+            RANGE="HEAD"
+          else
+            RANGE="${PREV_TAG}..HEAD"
+          fi
+
+          {
+            echo "CHANGELOG<<EOF"
+            git log ${RANGE} \
+              --pretty=format:"- %s ([%h](https://github.com/${{ github.repository }}/commit/%H))" \
+              --no-merges
+            echo ""
+            echo "EOF"
+          } >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ env.VERSION }}
+          body: |
+            ## Changes
+
+            ${{ env.CHANGELOG }}
+
+            ---
+
+            **Full diff:** https://github.com/${{ github.repository }}/compare/${{ env.PREV_TAG }}...${{ env.VERSION }}
+          files: ${{ env.ARCHIVE }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
