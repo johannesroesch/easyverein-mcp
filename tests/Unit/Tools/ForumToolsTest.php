@@ -92,6 +92,67 @@ class ForumToolsTest extends AbstractToolsTest
         $this->assertDeletedMessage($result);
     }
 
+    // ── updateForum ───────────────────────────────────────────────────────────
+
+    public function testUpdateForumUsesPatch(): void
+    {
+        $this->addOk('{"id":5}');
+        $this->tools->dispatch('updateForum', ['token' => 'tok', 'id' => 5, 'name' => 'Updated Forum']);
+        $this->assertPatchTo('/forum/5/');
+        $this->assertBodyContains('name', 'Updated Forum');
+    }
+
+    // ── getTopic ─────────────────────────────────────────────────────────────
+
+    public function testGetTopicUsesCorrectPath(): void
+    {
+        $this->addOk('{"id":2}');
+        $this->tools->dispatch('getTopic', ['token' => 'tok', 'id' => 2]);
+        $this->assertGetTo('/topic/2/');
+    }
+
+    // ── updateTopic ───────────────────────────────────────────────────────────
+
+    public function testUpdateTopicUsesPatch(): void
+    {
+        $this->addOk('{"id":2}');
+        $this->tools->dispatch('updateTopic', ['token' => 'tok', 'id' => 2, 'title' => 'Updated Topic']);
+        $this->assertPatchTo('/topic/2/');
+        $this->assertBodyContains('title', 'Updated Topic');
+    }
+
+    // ── getPost ───────────────────────────────────────────────────────────────
+
+    public function testGetPostUsesCorrectPath(): void
+    {
+        $this->addOk('{"id":3}');
+        $this->tools->dispatch('getPost', ['token' => 'tok', 'id' => 3]);
+        $this->assertGetTo('/post/3/');
+    }
+
+    // ── createPost ────────────────────────────────────────────────────────────
+
+    public function testCreatePostUsesPost(): void
+    {
+        $this->addOk('{"id":1}', 201);
+        $this->tools->dispatch('createPost', ['token' => 'tok', 'text' => 'Hello!', 'topic' => 2]);
+        $this->assertPostTo('/post/');
+        $this->assertBodyContains('text', 'Hello!');
+        $this->assertBodyContains('topic', 2);
+    }
+
+    // ── updatePost ────────────────────────────────────────────────────────────
+
+    public function testUpdatePostUsesPatch(): void
+    {
+        $this->addOk('{"id":3}');
+        $this->tools->dispatch('updatePost', ['token' => 'tok', 'id' => 3, 'text' => 'Updated post']);
+        $this->assertPatchTo('/post/3/');
+        $this->assertBodyContains('text', 'Updated post');
+    }
+
+    // ── Unknown tool ──────────────────────────────────────────────────────────
+
     public function testUnknownToolThrowsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);

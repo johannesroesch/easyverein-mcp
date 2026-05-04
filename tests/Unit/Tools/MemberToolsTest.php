@@ -158,6 +158,141 @@ class MemberToolsTest extends AbstractToolsTest
         self::assertStringContainsString('member=42', $url);
     }
 
+    // ── getMemberGroup ────────────────────────────────────────────────────────
+
+    public function testGetMemberGroupUsesCorrectPath(): void
+    {
+        $this->addOk('{"id":9}');
+        $this->tools->dispatch('getMemberGroup', ['token' => 'tok', 'id' => 9]);
+        $this->assertGetTo('/member-group/9/');
+    }
+
+    // ── updateMemberGroup ─────────────────────────────────────────────────────
+
+    public function testUpdateMemberGroupUsesPatch(): void
+    {
+        $this->addOk('{"id":9}');
+        $this->tools->dispatch('updateMemberGroup', ['token' => 'tok', 'id' => 9, 'name' => 'Updated']);
+        $this->assertPatchTo('/member-group/9/');
+        $this->assertBodyContains('name', 'Updated');
+    }
+
+    // ── createMemberGroupAssignment ───────────────────────────────────────────
+
+    public function testCreateMemberGroupAssignmentUsesPost(): void
+    {
+        $this->addOk('{"id":1}', 201);
+        $this->tools->dispatch('createMemberGroupAssignment', ['token' => 'tok', 'member' => 5, 'member_group' => 2]);
+        $this->assertPostTo('/member-group-assignment/');
+        $this->assertBodyContains('member', 5);
+        $this->assertBodyContains('member_group', 2);
+    }
+
+    // ── deleteMemberGroupAssignment ───────────────────────────────────────────
+
+    public function testDeleteMemberGroupAssignmentReturnsDeletedMessage(): void
+    {
+        $this->addDeleted();
+        $result = $this->tools->dispatch('deleteMemberGroupAssignment', ['token' => 'tok', 'id' => 10]);
+        $this->assertDeletedMessage($result);
+    }
+
+    // ── getMemberCustomFieldAssignment ────────────────────────────────────────
+
+    public function testGetMemberCustomFieldAssignmentUsesCorrectPath(): void
+    {
+        $this->addOk('{"id":11}');
+        $this->tools->dispatch('getMemberCustomFieldAssignment', ['token' => 'tok', 'id' => 11]);
+        $this->assertGetTo('/member-custom-field-assignment/11/');
+    }
+
+    // ── createMemberCustomFieldAssignment ────────────────────────────────────
+
+    public function testCreateMemberCustomFieldAssignmentUsesPost(): void
+    {
+        $this->addOk('{"id":1}', 201);
+        $this->tools->dispatch('createMemberCustomFieldAssignment', ['token' => 'tok', 'custom_field' => 3, 'value' => 'red']);
+        $this->assertPostTo('/member-custom-field-assignment/');
+        $this->assertBodyContains('custom_field', 3);
+        $this->assertBodyContains('value', 'red');
+    }
+
+    // ── updateMemberCustomFieldAssignment ────────────────────────────────────
+
+    public function testUpdateMemberCustomFieldAssignmentUsesPatch(): void
+    {
+        $this->addOk('{"id":11}');
+        $this->tools->dispatch('updateMemberCustomFieldAssignment', ['token' => 'tok', 'id' => 11, 'value' => 'blue']);
+        $this->assertPatchTo('/member-custom-field-assignment/11/');
+        $this->assertBodyContains('value', 'blue');
+    }
+
+    // ── deleteMemberCustomFieldAssignment ────────────────────────────────────
+
+    public function testDeleteMemberCustomFieldAssignmentReturnsDeletedMessage(): void
+    {
+        $this->addDeleted();
+        $result = $this->tools->dispatch('deleteMemberCustomFieldAssignment', ['token' => 'tok', 'id' => 11]);
+        $this->assertDeletedMessage($result);
+    }
+
+    // ── listMemberCustomFieldAssignmentChangeRequests ─────────────────────────
+
+    public function testListMemberCustomFieldAssignmentChangeRequestsUsesGet(): void
+    {
+        $this->addOk('{"results":[]}');
+        $this->tools->dispatch('listMemberCustomFieldAssignmentChangeRequests', ['token' => 'tok']);
+        $this->assertGetTo('/member-custom-field-assignment-change-request/');
+    }
+
+    // ── getMemberCustomFieldAssignmentChangeRequest ───────────────────────────
+
+    public function testGetMemberCustomFieldAssignmentChangeRequestUsesCorrectPath(): void
+    {
+        $this->addOk('{"id":20}');
+        $this->tools->dispatch('getMemberCustomFieldAssignmentChangeRequest', ['token' => 'tok', 'id' => 20]);
+        $this->assertGetTo('/member-custom-field-assignment-change-request/20/');
+    }
+
+    // ── createMemberCustomFieldAssignmentChangeRequest ────────────────────────
+
+    public function testCreateMemberCustomFieldAssignmentChangeRequestUsesPost(): void
+    {
+        $this->addOk('{"id":1}', 201);
+        $this->tools->dispatch('createMemberCustomFieldAssignmentChangeRequest', ['token' => 'tok', 'field_value' => 'new']);
+        $this->assertPostTo('/member-custom-field-assignment-change-request/');
+        $this->assertBodyContains('field_value', 'new');
+    }
+
+    // ── updateMemberCustomFieldAssignmentChangeRequest ────────────────────────
+
+    public function testUpdateMemberCustomFieldAssignmentChangeRequestUsesPatch(): void
+    {
+        $this->addOk('{"id":20}');
+        $this->tools->dispatch('updateMemberCustomFieldAssignmentChangeRequest', ['token' => 'tok', 'id' => 20, 'field_value' => 'updated']);
+        $this->assertPatchTo('/member-custom-field-assignment-change-request/20/');
+        $this->assertBodyContains('field_value', 'updated');
+    }
+
+    // ── deleteMemberCustomFieldAssignmentChangeRequest ────────────────────────
+
+    public function testDeleteMemberCustomFieldAssignmentChangeRequestReturnsDeletedMessage(): void
+    {
+        $this->addDeleted();
+        $result = $this->tools->dispatch('deleteMemberCustomFieldAssignmentChangeRequest', ['token' => 'tok', 'id' => 20]);
+        $this->assertDeletedMessage($result);
+    }
+
+    // ── listMemberCustomFieldAssignments with member filter ───────────────────
+
+    public function testListMemberCustomFieldAssignmentsWithMemberFilter(): void
+    {
+        $this->addOk('{"results":[]}');
+        $this->tools->dispatch('listMemberCustomFieldAssignments', ['token' => 'tok', 'member' => 7]);
+        $url = $this->lastCall()['url'];
+        self::assertStringContainsString('member=7', $url);
+    }
+
     // ── Unknown tool ──────────────────────────────────────────────────────────
 
     public function testUnknownToolThrowsInvalidArgumentException(): void

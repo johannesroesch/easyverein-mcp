@@ -87,13 +87,93 @@ class PasscreatorToolsTest extends AbstractToolsTest
         $this->assertGetTo('/passcreator-integration/');
     }
 
-    public function testCreatePassBodyExcludesMissingFields(): void
+    // ── getPassField ──────────────────────────────────────────────────────────
+
+    public function testGetPassFieldUsesCorrectPath(): void
+    {
+        $this->addOk('{"id":5}');
+        $this->tools->dispatch('getPassField', ['token' => 'tok', 'id' => 5]);
+        $this->assertGetTo('/pass-field/5/');
+    }
+
+    // ── createPassField ───────────────────────────────────────────────────────
+
+    public function testCreatePassFieldUsesPost(): void
     {
         $this->addOk('{"id":1}', 201);
-        $this->tools->dispatch('createPass', ['token' => 'tok', 'name' => 'Only Name']);
-        $this->assertBodyContains('name', 'Only Name');
-        $this->assertBodyNotContains('serial_number');
+        $this->tools->dispatch('createPassField', ['token' => 'tok', 'field_name' => 'memberName', 'value' => 'Max']);
+        $this->assertPostTo('/pass-field/');
+        $this->assertBodyContains('field_name', 'memberName');
     }
+
+    // ── updatePassField ───────────────────────────────────────────────────────
+
+    public function testUpdatePassFieldUsesPatch(): void
+    {
+        $this->addOk('{"id":5}');
+        $this->tools->dispatch('updatePassField', ['token' => 'tok', 'id' => 5, 'value' => 'Anna']);
+        $this->assertPatchTo('/pass-field/5/');
+        $this->assertBodyContains('value', 'Anna');
+    }
+
+    // ── deletePassField ───────────────────────────────────────────────────────
+
+    public function testDeletePassFieldReturnsDeletedMessage(): void
+    {
+        $this->addDeleted();
+        $result = $this->tools->dispatch('deletePassField', ['token' => 'tok', 'id' => 5]);
+        $this->assertDeletedMessage($result);
+    }
+
+    // ── getPassTemplate ───────────────────────────────────────────────────────
+
+    public function testGetPassTemplateUsesCorrectPath(): void
+    {
+        $this->addOk('{"id":2}');
+        $this->tools->dispatch('getPassTemplate', ['token' => 'tok', 'id' => 2]);
+        $this->assertGetTo('/pass-template/2/');
+    }
+
+    // ── createPassTemplate ────────────────────────────────────────────────────
+
+    public function testCreatePassTemplateUsesPost(): void
+    {
+        $this->addOk('{"id":1}', 201);
+        $this->tools->dispatch('createPassTemplate', ['token' => 'tok', 'name' => 'Member Card']);
+        $this->assertPostTo('/pass-template/');
+        $this->assertBodyContains('name', 'Member Card');
+    }
+
+    // ── updatePassTemplate ────────────────────────────────────────────────────
+
+    public function testUpdatePassTemplateUsesPatch(): void
+    {
+        $this->addOk('{"id":2}');
+        $this->tools->dispatch('updatePassTemplate', ['token' => 'tok', 'id' => 2, 'name' => 'Gold Card']);
+        $this->assertPatchTo('/pass-template/2/');
+        $this->assertBodyContains('name', 'Gold Card');
+    }
+
+    // ── deletePassTemplate ────────────────────────────────────────────────────
+
+    public function testDeletePassTemplateReturnsDeletedMessage(): void
+    {
+        $this->addDeleted();
+        $result = $this->tools->dispatch('deletePassTemplate', ['token' => 'tok', 'id' => 2]);
+        $this->assertDeletedMessage($result);
+    }
+
+    // ── updatePasscreatorIntegration ──────────────────────────────────────────
+
+    public function testUpdatePasscreatorIntegrationUsesPatch(): void
+    {
+        $this->addOk('{"id":1}');
+        $this->tools->dispatch('updatePasscreatorIntegration', ['token' => 'tok', 'is_active' => true]);
+        $this->assertPatchTo('/passcreator-integration/');
+        $this->assertBodyContains('is_active', true);
+    }
+
+    // ── Unknown tool ──────────────────────────────────────────────────────────
 
     public function testUnknownToolThrowsException(): void
     {

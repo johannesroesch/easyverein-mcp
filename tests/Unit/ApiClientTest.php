@@ -282,4 +282,11 @@ class ApiClientTest extends TestCase
             $this->client->urlRef('/member', 42),
         );
     }
+
+    // ── getBaseUrl ────────────────────────────────────────────────────────────
+
+    public function testGetBaseUrlReturnsBaseUrl(): void
+    {
+        self::assertSame('https://example.com/api/v3.0', $this->client->getBaseUrl());
+    }
 }
