@@ -24,6 +24,11 @@
         "phpstan/phpstan": "^2.0",
         "friendsofphp/php-cs-fixer": "^3.0"
     },
+    "config": {
+        "platform": {
+            "php": "8.2"
+        }
+    },
     "scripts": {
         "test": "phpunit",
         "test-unit": "phpunit --testsuite Unit",
