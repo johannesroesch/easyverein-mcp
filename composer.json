@@ -2,6 +2,7 @@
     "name": "easyverein/mcp-server",
     "description": "MCP server exposing the EasyVerein API v3.0 as MCP tools",
     "type": "project",
+    "license": "MIT",
     "require": {
         "php": ">=8.2",
         "slim/slim": "^4.0",
