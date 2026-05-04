@@ -7,8 +7,9 @@ on:
     branches: [main]
 
 jobs:
+  # ── Tests ──────────────────────────────────────────────────────────────────
   test:
-    name: PHP ${{ matrix.php }}
+    name: Tests · PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -44,10 +45,7 @@ jobs:
 
       - name: Generate coverage report
         if: matrix.php == '8.2'
-        run: |
-          php vendor/bin/phpunit \
-            --coverage-clover coverage.xml \
-            --coverage-text
+        run: php vendor/bin/phpunit --coverage-clover coverage.xml --coverage-text
 
       - name: Upload coverage artifact
         if: matrix.php == '8.2'
@@ -56,3 +54,80 @@ jobs:
           name: coverage-report
           path: coverage.xml
           retention-days: 7
+
+  # ── Dependency audit ───────────────────────────────────────────────────────
+  audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Check for known vulnerabilities
+        run: composer audit
+
+  # ── Static analysis ────────────────────────────────────────────────────────
+  static-analysis:
+    name: Static Analysis (PHPStan)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-8.2-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-8.2-
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPStan
+        run: composer analyse
+
+  # ── Code style ─────────────────────────────────────────────────────────────
+  code-style:
+    name: Code Style (PHP-CS-Fixer)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-8.2-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-8.2-
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Check code style
+        run: composer cs-check

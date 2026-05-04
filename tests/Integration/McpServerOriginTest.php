@@ -8,8 +8,13 @@ class McpServerOriginTest extends AbstractMcpTest
 {
     private function postWithOrigin(string $origin): array
     {
-        $result = $this->server->handleStreamablePost('', '2025-11-25', $origin, 'Bearer tok', 'application/json',
-            json_encode(['jsonrpc' => '2.0', 'method' => 'ping', 'id' => 1])
+        $result = $this->server->handleStreamablePost(
+            '',
+            '2025-11-25',
+            $origin,
+            'Bearer tok',
+            'application/json',
+            json_encode(['jsonrpc' => '2.0', 'method' => 'ping', 'id' => 1]),
         );
         return $result;
     }
@@ -48,8 +53,13 @@ class McpServerOriginTest extends AbstractMcpTest
 
     public function testUnsupportedProtocolVersionReturns400(): void
     {
-        $result = $this->server->handleStreamablePost('', '2024-01-01', '', 'Bearer tok', 'application/json',
-            json_encode(['jsonrpc' => '2.0', 'method' => 'tools/list', 'id' => 1])
+        $result = $this->server->handleStreamablePost(
+            '',
+            '2024-01-01',
+            '',
+            'Bearer tok',
+            'application/json',
+            json_encode(['jsonrpc' => '2.0', 'method' => 'tools/list', 'id' => 1]),
         );
         self::assertSame(400, $result['status']);
     }

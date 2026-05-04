@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace EasyVerein\Mcp\Tools;
 
-use EasyVerein\Mcp\ApiClient;
-
 class PasscreatorTools extends AbstractTools
 {
-
     public function getDefinitions(): array
     {
         $pagination = [

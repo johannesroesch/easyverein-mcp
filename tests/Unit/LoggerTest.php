@@ -22,7 +22,7 @@ class LoggerTest extends TestCase
         $_ENV['LOG_LEVEL'] = 'DEBUG';
         Logger::init();
         // DEBUG-Meldungen dürfen bei Level DEBUG ankommen
-        $logged = $this->captureErrorLog(fn () => Logger::debug('test msg'));
+        $logged = $this->captureErrorLog(fn() => Logger::debug('test msg'));
         self::assertStringContainsString('test msg', $logged);
         unset($_ENV['LOG_LEVEL']);
     }
@@ -32,7 +32,7 @@ class LoggerTest extends TestCase
         unset($_ENV['LOG_LEVEL']);
         Logger::init();
         // DEBUG gefiltert bei INFO-Level
-        $logged = $this->captureErrorLog(fn () => Logger::debug('should be hidden'));
+        $logged = $this->captureErrorLog(fn() => Logger::debug('should be hidden'));
         self::assertSame('', $logged);
     }
 
@@ -40,7 +40,7 @@ class LoggerTest extends TestCase
     {
         Logger::setMinLevel('INFO');
         Logger::setMinLevel('NONSENSE'); // invalid → bleibt bei INFO
-        $logged = $this->captureErrorLog(fn () => Logger::debug('hidden'));
+        $logged = $this->captureErrorLog(fn() => Logger::debug('hidden'));
         self::assertSame('', $logged);
     }
 
@@ -49,35 +49,35 @@ class LoggerTest extends TestCase
     public function testDebugFilteredAtInfoLevel(): void
     {
         Logger::setMinLevel('INFO');
-        $logged = $this->captureErrorLog(fn () => Logger::debug('debug msg'));
+        $logged = $this->captureErrorLog(fn() => Logger::debug('debug msg'));
         self::assertSame('', $logged);
     }
 
     public function testDebugOutputAtDebugLevel(): void
     {
         Logger::setMinLevel('DEBUG');
-        $logged = $this->captureErrorLog(fn () => Logger::debug('debug msg'));
+        $logged = $this->captureErrorLog(fn() => Logger::debug('debug msg'));
         self::assertStringContainsString('debug msg', $logged);
     }
 
     public function testInfoOutputAtInfoLevel(): void
     {
         Logger::setMinLevel('INFO');
-        $logged = $this->captureErrorLog(fn () => Logger::info('info msg'));
+        $logged = $this->captureErrorLog(fn() => Logger::info('info msg'));
         self::assertStringContainsString('info msg', $logged);
     }
 
     public function testWarningOutputAtInfoLevel(): void
     {
         Logger::setMinLevel('INFO');
-        $logged = $this->captureErrorLog(fn () => Logger::warning('warn msg'));
+        $logged = $this->captureErrorLog(fn() => Logger::warning('warn msg'));
         self::assertStringContainsString('warn msg', $logged);
     }
 
     public function testErrorOutputAtInfoLevel(): void
     {
         Logger::setMinLevel('INFO');
-        $logged = $this->captureErrorLog(fn () => Logger::error('error msg'));
+        $logged = $this->captureErrorLog(fn() => Logger::error('error msg'));
         self::assertStringContainsString('error msg', $logged);
     }
 
@@ -85,7 +85,7 @@ class LoggerTest extends TestCase
 
     public function testOutputIsValidJson(): void
     {
-        $logged = $this->captureErrorLog(fn () => Logger::info('json test'));
+        $logged = $this->captureErrorLog(fn() => Logger::info('json test'));
         $data   = $this->parseLogLine($logged);
         self::assertIsArray($data);
         self::assertNotEmpty($data);
@@ -93,7 +93,7 @@ class LoggerTest extends TestCase
 
     public function testOutputContainsTsLevelMsgFields(): void
     {
-        $logged = $this->captureErrorLog(fn () => Logger::info('fields test'));
+        $logged = $this->captureErrorLog(fn() => Logger::info('fields test'));
         $data   = $this->parseLogLine($logged);
         self::assertArrayHasKey('ts', $data);
         self::assertArrayHasKey('level', $data);
@@ -102,14 +102,14 @@ class LoggerTest extends TestCase
 
     public function testLevelFieldMatchesCalledMethod(): void
     {
-        $logged = $this->captureErrorLog(fn () => Logger::warning('level check'));
+        $logged = $this->captureErrorLog(fn() => Logger::warning('level check'));
         $data   = $this->parseLogLine($logged);
         self::assertSame('WARNING', $data['level']);
     }
 
     public function testContextKeysInOutput(): void
     {
-        $logged = $this->captureErrorLog(fn () => Logger::info('ctx test', ['foo' => 'bar', 'num' => 42]));
+        $logged = $this->captureErrorLog(fn() => Logger::info('ctx test', ['foo' => 'bar', 'num' => 42]));
         $data   = $this->parseLogLine($logged);
         self::assertSame('bar', $data['foo']);
         self::assertSame(42, $data['num']);

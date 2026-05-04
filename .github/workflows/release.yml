@@ -29,9 +29,37 @@ jobs:
       - name: Run tests
         run: composer test
 
+  quality:
+    name: Quality gates
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Dependency audit
+        run: composer audit
+
+      - name: Static analysis
+        run: composer analyse
+
+      - name: Code style
+        run: composer cs-check
+
   release:
     name: Create GitHub Release
-    needs: test
+    needs: [test, quality]
     runs-on: ubuntu-latest
 
     steps:

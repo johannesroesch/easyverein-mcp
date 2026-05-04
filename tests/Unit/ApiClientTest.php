@@ -271,7 +271,7 @@ class ApiClientTest extends TestCase
     {
         self::assertSame(
             'https://example.com/api/v3.0/application-form/22719',
-            $this->client->urlRef('/application-form/', 22719)
+            $this->client->urlRef('/application-form/', 22719),
         );
     }
 
@@ -279,7 +279,7 @@ class ApiClientTest extends TestCase
     {
         self::assertSame(
             'https://example.com/api/v3.0/member/42',
-            $this->client->urlRef('/member', 42)
+            $this->client->urlRef('/member', 42),
         );
     }
 }

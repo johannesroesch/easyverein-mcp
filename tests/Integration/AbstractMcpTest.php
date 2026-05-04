@@ -44,7 +44,7 @@ abstract class AbstractMcpTest extends TestCase
             $this->jsonRpc('initialize', ['protocolVersion' => $protocolVersion, 'clientInfo' => ['name' => 'test', 'version' => '1.0']]),
             'Bearer test-token',
             '',
-            $protocolVersion
+            $protocolVersion,
         );
     }
 }

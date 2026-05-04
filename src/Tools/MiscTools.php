@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace EasyVerein\Mcp\Tools;
 
-use EasyVerein\Mcp\ApiClient;
-
 class MiscTools extends AbstractTools
 {
-
     public function getDefinitions(): array
     {
         $pagination = [
@@ -37,7 +34,7 @@ class MiscTools extends AbstractTools
             'name'     => ['type' => 'string',  'description' => 'Page template name'],
             'content'  => ['type' => 'string',  'description' => 'Template content (HTML)'],
             'css'      => ['type' => 'string',  'description' => 'CSS styles'],
-            'is_active'=> ['type' => 'boolean', 'description' => 'Whether active'],
+            'is_active' => ['type' => 'boolean', 'description' => 'Whether active'],
         ];
 
         $publicChatRoomFields = [
@@ -195,7 +192,7 @@ class MiscTools extends AbstractTools
             'voting_mode'           => ['type' => 'integer', 'description' => 'Voting mode'],
             'allowed_member_groups' => ['type' => 'array',   'description' => 'Allowed member group IDs (array)'],
             'submission_note'       => ['type' => 'string',  'description' => 'Zeichenwert'],
-            'voted_participants_ids'=> ['type' => 'string',  'description' => 'Zeichenwert'],
+            'voted_participants_ids' => ['type' => 'string',  'description' => 'Zeichenwert'],
             'already_voted_emails'  => ['type' => 'string',  'description' => 'Zeichenwert'],
         ];
 
@@ -278,7 +275,7 @@ class MiscTools extends AbstractTools
             'billing_account'     => ['type' => 'integer', 'description' => 'Billing account ID'],
             'name'                => ['type' => 'string',  'description' => 'Name'],
             'description'         => ['type' => 'string',  'description' => 'Description'],
-            'has_unlimited_pieces'=> ['type' => 'boolean', 'description' => 'Boolscher Wert'],
+            'has_unlimited_pieces' => ['type' => 'boolean', 'description' => 'Boolscher Wert'],
             'pieces'              => ['type' => 'integer', 'description' => 'Quantity in stock'],
             'reserved_pieces'     => ['type' => 'integer', 'description' => 'Zahlenwert'],
             'selling_price'       => ['type' => 'number',  'description' => 'Zahlenwert'],
@@ -919,9 +916,9 @@ class MiscTools extends AbstractTools
             'deleteCustomField'     => $this->deleted($p['token'], '/custom-field/' . $p['id'] . '/', 'CustomField'),
             'listDocumentTemplates' => $this->client->get($p['token'], '/document-template/', $this->pagination($p)),
             'getDocumentTemplate'   => $this->client->get($p['token'], '/document-template/' . $p['id'] . '/'),
-            'createDocumentTemplate'=> $this->client->post($p['token'], '/document-template/', $this->bodyFrom($p, ['name', 'description', 'content', 'is_active'])),
-            'updateDocumentTemplate'=> $this->client->patch($p['token'], '/document-template/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'description', 'content', 'is_active'])),
-            'deleteDocumentTemplate'=> $this->deleted($p['token'], '/document-template/' . $p['id'] . '/', 'DocumentTemplate'),
+            'createDocumentTemplate' => $this->client->post($p['token'], '/document-template/', $this->bodyFrom($p, ['name', 'description', 'content', 'is_active'])),
+            'updateDocumentTemplate' => $this->client->patch($p['token'], '/document-template/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'description', 'content', 'is_active'])),
+            'deleteDocumentTemplate' => $this->deleted($p['token'], '/document-template/' . $p['id'] . '/', 'DocumentTemplate'),
             'listCalendars'         => $this->client->get($p['token'], '/calendar/', $this->pagination($p)),
             'getCalendar'           => $this->client->get($p['token'], '/calendar/' . $p['id'] . '/'),
             'createCalendar'        => $this->client->post($p['token'], '/calendar/', $this->bodyFrom($p, ['name', 'color', 'short', 'allowed_groups', 'calendar_import_url', 'delete_events_after_deletion'])),
@@ -972,7 +969,7 @@ class MiscTools extends AbstractTools
             'updateCustomFieldCollection'   => $this->client->patch($p['token'], '/custom-field-collection/' . $p['id'] . '/', $this->bodyFrom($p, ['name', 'order_sequence', 'position'])),
             'deleteCustomFieldCollection'   => $this->deleted($p['token'], '/custom-field-collection/' . $p['id'] . '/', 'CustomFieldCollection'),
             'getDocumentTemplateSettings'   => $this->client->get($p['token'], '/document-template-settings/'),
-            'updateDocumentTemplateSettings'=> $this->client->patch($p['token'], '/document-template-settings/', $this->bodyFrom($p, ['name', 'description', 'css', 'header', 'footer'])),
+            'updateDocumentTemplateSettings' => $this->client->patch($p['token'], '/document-template-settings/', $this->bodyFrom($p, ['name', 'description', 'css', 'header', 'footer'])),
             'listPageTemplates'       => $this->client->get($p['token'], '/page-template/', $this->pagination($p)),
             'getPageTemplate'         => $this->client->get($p['token'], '/page-template/' . $p['id'] . '/'),
             'createPageTemplate'      => $this->client->post($p['token'], '/page-template/', $this->bodyFrom($p, ['name', 'content', 'css', 'is_active'])),
@@ -980,9 +977,9 @@ class MiscTools extends AbstractTools
             'deletePageTemplate'      => $this->deleted($p['token'], '/page-template/' . $p['id'] . '/', 'PageTemplate'),
             'listAnniversaryMailings' => $this->client->get($p['token'], '/anniversary-mailing/', $this->pagination($p)),
             'getAnniversaryMailing'   => $this->client->get($p['token'], '/anniversary-mailing/' . $p['id'] . '/'),
-            'createAnniversaryMailing'=> $this->client->post($p['token'], '/anniversary-mailing/', $this->bodyFrom($p, ['subject', 'content', 'attachments', 'name', 'anniversary_years', 'anniversary_kind'])),
-            'updateAnniversaryMailing'=> $this->client->patch($p['token'], '/anniversary-mailing/' . $p['id'] . '/', $this->bodyFrom($p, ['subject', 'content', 'attachments', 'name', 'anniversary_years', 'anniversary_kind'])),
-            'deleteAnniversaryMailing'=> $this->deleted($p['token'], '/anniversary-mailing/' . $p['id'] . '/', 'AnniversaryMailing'),
+            'createAnniversaryMailing' => $this->client->post($p['token'], '/anniversary-mailing/', $this->bodyFrom($p, ['subject', 'content', 'attachments', 'name', 'anniversary_years', 'anniversary_kind'])),
+            'updateAnniversaryMailing' => $this->client->patch($p['token'], '/anniversary-mailing/' . $p['id'] . '/', $this->bodyFrom($p, ['subject', 'content', 'attachments', 'name', 'anniversary_years', 'anniversary_kind'])),
+            'deleteAnniversaryMailing' => $this->deleted($p['token'], '/anniversary-mailing/' . $p['id'] . '/', 'AnniversaryMailing'),
             'listPublicChatRooms'     => $this->client->get($p['token'], '/public-chat-room/', $this->pagination($p)),
             'getPublicChatRoom'       => $this->client->get($p['token'], '/public-chat-room/' . $p['id'] . '/'),
             'createPublicChatRoom'    => $this->client->post($p['token'], '/public-chat-room/', $this->bodyFrom($p, ['name', 'description', 'is_public', 'allowed_groups', 'moderated', 'allow_file_upload'])),

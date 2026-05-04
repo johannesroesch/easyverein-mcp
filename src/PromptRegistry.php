@@ -144,10 +144,10 @@ class PromptRegistry
         return $this->prompt(
             'Alle Vereinsmitglieder mit Gruppen und Kontaktdaten zusammenfassen.',
             <<<TEXT
-            Erstelle eine strukturierte Übersicht aller Vereinsmitglieder.
-            Rufe dazu listMembers auf und fasse die Ergebnisse übersichtlich zusammen
-            (Name, E-Mail, Mitgliedsgruppe, Status). Zeige auch die Gesamtanzahl an.
-            TEXT
+                Erstelle eine strukturierte Übersicht aller Vereinsmitglieder.
+                Rufe dazu listMembers auf und fasse die Ergebnisse übersichtlich zusammen
+                (Name, E-Mail, Mitgliedsgruppe, Status). Zeige auch die Gesamtanzahl an.
+                TEXT
         );
     }
 
@@ -156,7 +156,7 @@ class PromptRegistry
         return $this->prompt(
             'Mitglied "' . $query . '" suchen.',
             'Suche nach Vereinsmitgliedern mit dem Suchbegriff "' . $query . '".' . "\n" .
-            "Rufe listMembers mit dem search-Parameter auf und zeige alle Treffer mit\nName, E-Mail und Mitgliedsgruppe an."
+            "Rufe listMembers mit dem search-Parameter auf und zeige alle Treffer mit\nName, E-Mail und Mitgliedsgruppe an.",
         );
     }
 
@@ -165,14 +165,14 @@ class PromptRegistry
         return $this->prompt(
             'Neues Vereinsmitglied anlegen.',
             <<<TEXT
-            Ich möchte ein neues Vereinsmitglied anlegen.
-            Frage mich bitte Schritt für Schritt nach den nötigen Daten:
-            1. Vorname und Nachname
-            2. E-Mail-Adresse
-            3. Gewünschte Mitgliedsgruppe (rufe vorher listMemberGroups auf, damit ich wählen kann)
+                Ich möchte ein neues Vereinsmitglied anlegen.
+                Frage mich bitte Schritt für Schritt nach den nötigen Daten:
+                1. Vorname und Nachname
+                2. E-Mail-Adresse
+                3. Gewünschte Mitgliedsgruppe (rufe vorher listMemberGroups auf, damit ich wählen kann)
 
-            Lege das Mitglied danach mit createMember an und bestätige die erfolgreiche Erstellung.
-            TEXT
+                Lege das Mitglied danach mit createMember an und bestätige die erfolgreiche Erstellung.
+                TEXT
         );
     }
 
@@ -181,10 +181,10 @@ class PromptRegistry
         return $this->prompt(
             'Alle offenen Rechnungen auflisten.',
             <<<TEXT
-            Zeige eine Übersicht aller offenen Rechnungen des Vereins.
-            Rufe listInvoices auf und liste Rechnungsnummer, Empfänger, Betrag und
-            Fälligkeitsdatum auf. Berechne die Gesamtsumme aller offenen Beträge.
-            TEXT
+                Zeige eine Übersicht aller offenen Rechnungen des Vereins.
+                Rufe listInvoices auf und liste Rechnungsnummer, Empfänger, Betrag und
+                Fälligkeitsdatum auf. Berechne die Gesamtsumme aller offenen Beträge.
+                TEXT
         );
     }
 
@@ -193,14 +193,14 @@ class PromptRegistry
         return $this->prompt(
             "Buchungsübersicht $month/$year.",
             <<<TEXT
-            Erstelle eine Buchungsübersicht für $month/$year.
-            Rufe listBookings auf und fasse die Ergebnisse zusammen:
-            - Summe Einnahmen
-            - Summe Ausgaben
-            - Saldo
+                Erstelle eine Buchungsübersicht für $month/$year.
+                Rufe listBookings auf und fasse die Ergebnisse zusammen:
+                - Summe Einnahmen
+                - Summe Ausgaben
+                - Saldo
 
-            Gruppiere nach Buchungstyp, wenn möglich.
-            TEXT
+                Gruppiere nach Buchungstyp, wenn möglich.
+                TEXT
         );
     }
 
@@ -211,7 +211,7 @@ class PromptRegistry
             'Ich möchte eine Rechnung für "' . $member . '" erstellen.' . "\n" .
             "1. Suche das Mitglied zuerst mit listMembers (search-Parameter)\n" .
             "2. Frage mich nach Rechnungsposition, Betrag und Fälligkeitsdatum\n" .
-            "3. Erstelle die Rechnung mit createInvoice und bestätige die Erstellung"
+            '3. Erstelle die Rechnung mit createInvoice und bestätige die Erstellung',
         );
     }
 
@@ -220,10 +220,10 @@ class PromptRegistry
         return $this->prompt(
             'Bevorstehende Veranstaltungen anzeigen.',
             <<<TEXT
-            Zeige alle bevorstehenden Vereinsveranstaltungen.
-            Rufe listEvents auf und zeige für jedes Event: Name, Datum, Ort und
-            aktuelle Teilnehmerzahl. Sortiere nach Datum aufsteigend.
-            TEXT
+                Zeige alle bevorstehenden Vereinsveranstaltungen.
+                Rufe listEvents auf und zeige für jedes Event: Name, Datum, Ort und
+                aktuelle Teilnehmerzahl. Sortiere nach Datum aufsteigend.
+                TEXT
         );
     }
 
@@ -234,7 +234,7 @@ class PromptRegistry
             'Zeige die vollständige Teilnehmerliste für die Veranstaltung "' . $event . '".' . "\n" .
             "1. Suche die Veranstaltung mit listEvents\n" .
             "2. Rufe listParticipations für die gefundene Event-ID auf\n" .
-            "3. Zeige Name und Anmeldestatus jedes Teilnehmers an"
+            '3. Zeige Name und Anmeldestatus jedes Teilnehmers an',
         );
     }
 
@@ -243,13 +243,13 @@ class PromptRegistry
         return $this->prompt(
             'Kompaktes Vereins-Dashboard.',
             <<<TEXT
-            Erstelle eine kompakte Vereinszusammenfassung:
-            1. Rufe getOrganization auf für Vereinsname und Kontaktdaten
-            2. Rufe listMembers auf für die Gesamtmitgliederzahl
-            3. Rufe listTasks auf für offene Aufgaben
+                Erstelle eine kompakte Vereinszusammenfassung:
+                1. Rufe getOrganization auf für Vereinsname und Kontaktdaten
+                2. Rufe listMembers auf für die Gesamtmitgliederzahl
+                3. Rufe listTasks auf für offene Aufgaben
 
-            Fasse alles in einem übersichtlichen Dashboard zusammen.
-            TEXT
+                Fasse alles in einem übersichtlichen Dashboard zusammen.
+                TEXT
         );
     }
 
@@ -258,10 +258,10 @@ class PromptRegistry
         return $this->prompt(
             'Alle offenen Vereinsaufgaben anzeigen.',
             <<<TEXT
-            Zeige alle offenen Aufgaben des Vereins.
-            Rufe listTasks auf und liste Aufgabentitel, Beschreibung, Fälligkeit und
-            zugewiesene Person auf. Sortiere nach Dringlichkeit.
-            TEXT
+                Zeige alle offenen Aufgaben des Vereins.
+                Rufe listTasks auf und liste Aufgabentitel, Beschreibung, Fälligkeit und
+                zugewiesene Person auf. Sortiere nach Dringlichkeit.
+                TEXT
         );
     }
 
@@ -270,13 +270,13 @@ class PromptRegistry
         return $this->prompt(
             'Finanzüberblick des Vereins.',
             <<<TEXT
-            Erstelle einen kompakten Finanzüberblick des Vereins:
-            1. Rufe listBankAccounts auf – zeige alle Konten mit Name und Kontonummer
-            2. Rufe listBookingProjects auf – zeige aktive Buchungsprojekte
-            3. Rufe listBookings auf (limit=50) – berechne Einnahmen- und Ausgabensumme
+                Erstelle einen kompakten Finanzüberblick des Vereins:
+                1. Rufe listBankAccounts auf – zeige alle Konten mit Name und Kontonummer
+                2. Rufe listBookingProjects auf – zeige aktive Buchungsprojekte
+                3. Rufe listBookings auf (limit=50) – berechne Einnahmen- und Ausgabensumme
 
-            Fasse alles übersichtlich zusammen: Konten, Projekte, aktueller Saldo.
-            TEXT
+                Fasse alles übersichtlich zusammen: Konten, Projekte, aktueller Saldo.
+                TEXT
         );
     }
 
@@ -287,7 +287,7 @@ class PromptRegistry
             'Zeige alle Vereinsmitglieder, die im Monat ' . $month . ' Geburtstag haben.' . "\n" .
             "Rufe listMembers auf (ggf. mit mehreren Seiten) und filtere nach Mitgliedern,\n" .
             "deren Geburtsdatum in den Monat $month fällt.\n" .
-            "Liste Name, Geburtsdatum und E-Mail-Adresse auf. Sortiere nach Tag aufsteigend."
+            'Liste Name, Geburtsdatum und E-Mail-Adresse auf. Sortiere nach Tag aufsteigend.',
         );
     }
 
@@ -296,16 +296,16 @@ class PromptRegistry
         return $this->prompt(
             'Neue Vereinsveranstaltung anlegen.',
             <<<TEXT
-            Ich möchte eine neue Vereinsveranstaltung anlegen.
-            Frage mich bitte Schritt für Schritt nach den nötigen Daten:
-            1. Name der Veranstaltung
-            2. Datum und Uhrzeit (Beginn und Ende)
-            3. Ort (rufe vorher listLocations auf, damit ich wählen oder einen neuen Ort angeben kann)
-            4. Kurze Beschreibung (optional)
-            5. Maximale Teilnehmerzahl (optional)
+                Ich möchte eine neue Vereinsveranstaltung anlegen.
+                Frage mich bitte Schritt für Schritt nach den nötigen Daten:
+                1. Name der Veranstaltung
+                2. Datum und Uhrzeit (Beginn und Ende)
+                3. Ort (rufe vorher listLocations auf, damit ich wählen oder einen neuen Ort angeben kann)
+                4. Kurze Beschreibung (optional)
+                5. Maximale Teilnehmerzahl (optional)
 
-            Lege die Veranstaltung danach mit createEvent an und bestätige die Erstellung.
-            TEXT
+                Lege die Veranstaltung danach mit createEvent an und bestätige die Erstellung.
+                TEXT
         );
     }
 
@@ -314,10 +314,10 @@ class PromptRegistry
         return $this->prompt(
             'Vereinsinventar zusammenfassen.',
             <<<TEXT
-            Erstelle eine vollständige Inventarübersicht des Vereins.
-            Rufe listInventoryObjects auf (ggf. mehrere Seiten) und liste alle Objekte mit
-            Name, Beschreibung und Anzahl auf. Zeige die Gesamtanzahl aller Inventarposten.
-            TEXT
+                Erstelle eine vollständige Inventarübersicht des Vereins.
+                Rufe listInventoryObjects auf (ggf. mehrere Seiten) und liste alle Objekte mit
+                Name, Beschreibung und Anzahl auf. Zeige die Gesamtanzahl aller Inventarposten.
+                TEXT
         );
     }
 
@@ -326,13 +326,13 @@ class PromptRegistry
         return $this->prompt(
             'Forum-Übersicht anzeigen.',
             <<<TEXT
-            Zeige eine Übersicht der aktuellen Vereinsdiskussionen im Forum.
-            1. Rufe listForums auf – zeige alle verfügbaren Foren
-            2. Rufe listTopics auf – zeige die neuesten Themen mit Titel und Erstellungsdatum
-            3. Rufe listPosts auf (limit=5) – zeige die neuesten Beiträge
+                Zeige eine Übersicht der aktuellen Vereinsdiskussionen im Forum.
+                1. Rufe listForums auf – zeige alle verfügbaren Foren
+                2. Rufe listTopics auf – zeige die neuesten Themen mit Titel und Erstellungsdatum
+                3. Rufe listPosts auf (limit=5) – zeige die neuesten Beiträge
 
-            Fasse zusammen, was gerade diskutiert wird.
-            TEXT
+                Fasse zusammen, was gerade diskutiert wird.
+                TEXT
         );
     }
 }

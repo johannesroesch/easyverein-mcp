@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace EasyVerein\Mcp\Tools;
 
-use EasyVerein\Mcp\ApiClient;
-
 class EventTools extends AbstractTools
 {
-
     public function getDefinitions(): array
     {
         $pagination = [
@@ -127,14 +124,14 @@ class EventTools extends AbstractTools
             'deleteEvent'        => $this->deleted($p['token'], '/event/' . $p['id'] . '/', 'Event'),
             'listParticipations' => $this->client->get($p['token'], '/participation/', $this->pagination($p) + $this->optional($p, 'event') + $this->optional($p, 'member')),
             'getParticipation'   => $this->client->get($p['token'], '/participation/' . $p['id'] . '/'),
-            'createParticipation'=> $this->client->post($p['token'], '/participation/', $this->bodyFrom($p, ['participation_address', 'name', 'show_name', 'state', 'description', 'is_companion'])),
-            'updateParticipation'=> $this->client->patch($p['token'], '/participation/' . $p['id'] . '/', $this->bodyFrom($p, ['participation_address', 'name', 'show_name', 'state', 'description', 'is_companion'])),
-            'deleteParticipation'=> $this->deleted($p['token'], '/participation/' . $p['id'] . '/', 'Participation'),
+            'createParticipation' => $this->client->post($p['token'], '/participation/', $this->bodyFrom($p, ['participation_address', 'name', 'show_name', 'state', 'description', 'is_companion'])),
+            'updateParticipation' => $this->client->patch($p['token'], '/participation/' . $p['id'] . '/', $this->bodyFrom($p, ['participation_address', 'name', 'show_name', 'state', 'description', 'is_companion'])),
+            'deleteParticipation' => $this->deleted($p['token'], '/participation/' . $p['id'] . '/', 'Participation'),
             'listEventCustomFieldAssignments' => $this->client->get($p['token'], '/event-custom-field-assignment/', $this->pagination($p) + $this->optional($p, 'event')),
             'getEventCustomFieldAssignment'   => $this->client->get($p['token'], '/event-custom-field-assignment/' . $p['id'] . '/'),
-            'createEventCustomFieldAssignment'=> $this->client->post($p['token'], '/event-custom-field-assignment/', $this->bodyFrom($p, ['custom_field', 'value', 'selected_options'])),
-            'updateEventCustomFieldAssignment'=> $this->client->patch($p['token'], '/event-custom-field-assignment/' . $p['id'] . '/', $this->bodyFrom($p, ['custom_field', 'value', 'selected_options'])),
-            'deleteEventCustomFieldAssignment'=> $this->deleted($p['token'], '/event-custom-field-assignment/' . $p['id'] . '/', 'EventCustomFieldAssignment'),
+            'createEventCustomFieldAssignment' => $this->client->post($p['token'], '/event-custom-field-assignment/', $this->bodyFrom($p, ['custom_field', 'value', 'selected_options'])),
+            'updateEventCustomFieldAssignment' => $this->client->patch($p['token'], '/event-custom-field-assignment/' . $p['id'] . '/', $this->bodyFrom($p, ['custom_field', 'value', 'selected_options'])),
+            'deleteEventCustomFieldAssignment' => $this->deleted($p['token'], '/event-custom-field-assignment/' . $p['id'] . '/', 'EventCustomFieldAssignment'),
             'listApplicationForms'    => $this->client->get($p['token'], '/application-form/', $this->pagination($p)),
             'getApplicationForm'      => $this->client->get($p['token'], '/application-form/' . $p['id'] . '/'),
             'createApplicationForm'   => $this->client->post($p['token'], '/application-form/', $this->bodyFrom($p, ['title', 'public', 'hide_privacy_notice', 'show_in_select', 'language', 'formular_kind'])),

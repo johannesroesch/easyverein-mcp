@@ -22,59 +22,59 @@ class McpServer
     private const ALLOWED_ORIGINS    = ['localhost', '127.0.0.1', '::1'];
 
     private const INSTRUCTIONS = <<<'TEXT'
-Du bist mit dem EasyVerein MCP Server verbunden. EasyVerein ist eine deutschsprachige Vereinsverwaltungssoftware.
+        Du bist mit dem EasyVerein MCP Server verbunden. EasyVerein ist eine deutschsprachige Vereinsverwaltungssoftware.
 
-## Authentifizierung
-Alle tool/call- und resources/read-Anfragen erfordern einen EasyVerein API-Token.
-Der Token wird vom Client via Authorization: Bearer-Header übermittelt und automatisch weitergeleitet.
-Du musst den Token nicht selbst verwalten oder nachfragen.
+        ## Authentifizierung
+        Alle tool/call- und resources/read-Anfragen erfordern einen EasyVerein API-Token.
+        Der Token wird vom Client via Authorization: Bearer-Header übermittelt und automatisch weitergeleitet.
+        Du musst den Token nicht selbst verwalten oder nachfragen.
 
-## Resources vs. Tools
-- Resources (resources/read): ausschließlich lesend. URIs nach Schema easyverein://entity/{id} (Einzelobjekt) oder easyverein://entity/{?limit,page} (Liste).
-- Tools: schreibende Operationen (create / update / delete).
-Bevorzuge Resources für Lesezugriffe, da sie cachebar sind.
+        ## Resources vs. Tools
+        - Resources (resources/read): ausschließlich lesend. URIs nach Schema easyverein://entity/{id} (Einzelobjekt) oder easyverein://entity/{?limit,page} (Liste).
+        - Tools: schreibende Operationen (create / update / delete).
+        Bevorzuge Resources für Lesezugriffe, da sie cachebar sind.
 
-## Pagination
-Alle list-Resources und list-Tools unterstützen die Parameter `limit` (Seitengröße) und `page` (Seitennummer, ab 1).
-Ist im Response `next` nicht null, gibt es weitere Seiten — rufe dieselbe Resource/dasselbe Tool mit `page=current+1` auf.
+        ## Pagination
+        Alle list-Resources und list-Tools unterstützen die Parameter `limit` (Seitengröße) und `page` (Seitennummer, ab 1).
+        Ist im Response `next` nicht null, gibt es weitere Seiten — rufe dieselbe Resource/dasselbe Tool mit `page=current+1` auf.
 
-## Token-Erneuerung
-Die EasyVerein API sendet den Header `token_refresh_needed: True`, wenn der aktuelle Token bald abläuft.
-Der Server erkennt diesen Header automatisch und sendet eine Warnung als Log-Notification.
-Wenn du diese Warnung siehst:
-1. Rufe das Tool `refreshToken` auf — es gibt den neuen Token im Feld `Bearer` zurück.
-2. Weise den Nutzer an, den alten Token in seiner Client-Konfiguration durch den neuen zu ersetzen
-   (z. B. in claude_desktop_config.json, .mcp.json oder der jeweiligen MCP-Einstellung).
+        ## Token-Erneuerung
+        Die EasyVerein API sendet den Header `token_refresh_needed: True`, wenn der aktuelle Token bald abläuft.
+        Der Server erkennt diesen Header automatisch und sendet eine Warnung als Log-Notification.
+        Wenn du diese Warnung siehst:
+        1. Rufe das Tool `refreshToken` auf — es gibt den neuen Token im Feld `Bearer` zurück.
+        2. Weise den Nutzer an, den alten Token in seiner Client-Konfiguration durch den neuen zu ersetzen
+           (z. B. in claude_desktop_config.json, .mcp.json oder der jeweiligen MCP-Einstellung).
 
-## Löschoperationen (Elicitation)
-delete*-Tools lösen beim Nutzer eine Bestätigungsabfrage aus, bevor die Aktion ausgeführt wird.
-Kündige Löschvorgänge im Chat an, damit der Nutzer vorbereitet ist. Warte auf das Ergebnis,
-bevor du weitere Aktionen planst — der Nutzer kann abbrechen.
+        ## Löschoperationen (Elicitation)
+        delete*-Tools lösen beim Nutzer eine Bestätigungsabfrage aus, bevor die Aktion ausgeführt wird.
+        Kündige Löschvorgänge im Chat an, damit der Nutzer vorbereitet ist. Warte auf das Ergebnis,
+        bevor du weitere Aktionen planst — der Nutzer kann abbrechen.
 
-## Prompts
-Für häufige Workflows stehen vordefinierte Prompts bereit (member-overview, member-search,
-member-onboard, open-invoices, monthly-bookings, invoice-for-member, upcoming-events,
-event-participants, club-summary, pending-tasks, finance-summary, member-birthday,
-event-create, inventory-overview, forum-overview). Nutze diese bevorzugt statt mehrere
-Tools manuell zu kombinieren.
+        ## Prompts
+        Für häufige Workflows stehen vordefinierte Prompts bereit (member-overview, member-search,
+        member-onboard, open-invoices, monthly-bookings, invoice-for-member, upcoming-events,
+        event-participants, club-summary, pending-tasks, finance-summary, member-birthday,
+        event-create, inventory-overview, forum-overview). Nutze diese bevorzugt statt mehrere
+        Tools manuell zu kombinieren.
 
-## Fachdomänen
-- Mitglieder: member, member-group, member-group-assignment, member-custom-field-assignment, member-custom-field-assignment-change-request, former-member-data, anniversary-mailing
-- Kontakt: contact-details, contact-details-group, contact-details-change-request, contact-details-custom-field-assignment, contact-details-log
-- Veranstaltungen: event, participation, participation-price-group, event-custom-field-assignment, application-form, application-form-element
-- Finanzen: booking, invoice, invoice-item, bank-account, billing-account, booking-project, debit-order, debit-collection, custom-tax-rate, payment-method, discount-code
-- Forum: forum, topic, post
-- Aufgaben: task, task-group, task-comment
-- Protokolle: protocol, protocol-element, protocol-element-comment, protocol-upload
-- Inventar: inventory-object, inventory-object-group, inventory-object-custom-field-assignment, lending
-- Abstimmungen: voting, voting-question
-- Kalender & Orte: calendar, location
-- Dokumente: document-template, document-template-settings, page-template
-- Verwaltung: custom-field, custom-field-collection, custom-filter, session-filter, notification-log, wastebasket, accounting-plan
-- Organisation: organization, organization-settings, price-group, website, chairman-level, chairman-note, chairman-tutorial, article-object
-- Passcreator: pass, pass-field, pass-template, passcreator-integration
-- Integration & Auth: organization-token, oauth-credentials, oauth2-application, oauth2-custom-claim, smtp-email-setting, chat-settings, public-chat-room, file-system-path, update-highlight, update-highlight-entry, dosb-sport, lsb-sport, select-option, community-function-feedback, feature-request
-TEXT;
+        ## Fachdomänen
+        - Mitglieder: member, member-group, member-group-assignment, member-custom-field-assignment, member-custom-field-assignment-change-request, former-member-data, anniversary-mailing
+        - Kontakt: contact-details, contact-details-group, contact-details-change-request, contact-details-custom-field-assignment, contact-details-log
+        - Veranstaltungen: event, participation, participation-price-group, event-custom-field-assignment, application-form, application-form-element
+        - Finanzen: booking, invoice, invoice-item, bank-account, billing-account, booking-project, debit-order, debit-collection, custom-tax-rate, payment-method, discount-code
+        - Forum: forum, topic, post
+        - Aufgaben: task, task-group, task-comment
+        - Protokolle: protocol, protocol-element, protocol-element-comment, protocol-upload
+        - Inventar: inventory-object, inventory-object-group, inventory-object-custom-field-assignment, lending
+        - Abstimmungen: voting, voting-question
+        - Kalender & Orte: calendar, location
+        - Dokumente: document-template, document-template-settings, page-template
+        - Verwaltung: custom-field, custom-field-collection, custom-filter, session-filter, notification-log, wastebasket, accounting-plan
+        - Organisation: organization, organization-settings, price-group, website, chairman-level, chairman-note, chairman-tutorial, article-object
+        - Passcreator: pass, pass-field, pass-template, passcreator-integration
+        - Integration & Auth: organization-token, oauth-credentials, oauth2-application, oauth2-custom-claim, smtp-email-setting, chat-settings, public-chat-room, file-system-path, update-highlight, update-highlight-entry, dosb-sport, lsb-sport, select-option, community-function-feedback, feature-request
+        TEXT;
 
     private array         $tools            = [];
     private array         $toolHandlers     = [];
@@ -337,6 +337,7 @@ TEXT;
         $this->sendEvent('endpoint', $endpoint);
         flush();
 
+        /** @phpstan-ignore while.alwaysTrue */
         while (true) {
             $this->sendEvent('ping', '');
             flush();
@@ -713,7 +714,7 @@ TEXT;
 
         if ($pathId !== '' && ctype_digit($pathId) && isset($byPath['get'])) {
             $name = $byPath['get'];
-            $args = ['id' => (int)$pathId] + $query;
+            $args = ['id' => (int) $pathId] + $query;
         } elseif (isset($byPath['list'])) {
             $name = $byPath['list'];
             $args = $query;
@@ -744,7 +745,7 @@ TEXT;
             throw $e; // bubble up to top-level handler → -32001
         } catch (\Throwable $e) {
             Logger::warning('Resource read failed', ['uri' => $uri, 'error' => $e->getMessage()]);
-            $this->queueNotification('warning', "Resource read failed: " . $e->getMessage());
+            $this->queueNotification('warning', 'Resource read failed: ' . $e->getMessage());
             return ['contents' => [['uri' => $uri, 'mimeType' => 'application/json', 'text' => json_encode(['error' => $e->getMessage()])]]];
         }
     }
@@ -1211,10 +1212,10 @@ TEXT;
         // ID completions: return "id – name" strings for the most common entities
         if ($argName === 'id') {
             return match ($host) {
-                'member'       => $this->fetchIdCompletions('/member/',       ['search' => $value, 'limit' => 20], 'name_for_sorting'),
-                'member-group' => $this->fetchIdCompletions('/member-group/', ['limit' => 50],                     'name', $value),
-                'event'        => $this->fetchIdCompletions('/event/',        ['search' => $value, 'limit' => 20], 'name'),
-                'custom-field' => $this->fetchIdCompletions('/custom-field/', ['limit' => 50],                     'name', $value),
+                'member'       => $this->fetchIdCompletions('/member/', ['search' => $value, 'limit' => 20], 'name_for_sorting'),
+                'member-group' => $this->fetchIdCompletions('/member-group/', ['limit' => 50], 'name', $value),
+                'event'        => $this->fetchIdCompletions('/event/', ['search' => $value, 'limit' => 20], 'name'),
+                'custom-field' => $this->fetchIdCompletions('/custom-field/', ['limit' => 50], 'name', $value),
                 default        => [],
             };
         }

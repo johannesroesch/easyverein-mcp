@@ -11,7 +11,7 @@ class McpServerPaginationTest extends AbstractMcpTest
         $this->http->addResponse($apiResponse, 200);
         $result = $this->post(
             $this->jsonRpc('resources/read', ['uri' => 'easyverein://member/']),
-            'Bearer test-token'
+            'Bearer test-token',
         );
         $content = $result['data']['result']['contents'][0]['text'] ?? '{}';
         return json_decode($content, true) ?? [];
@@ -69,7 +69,7 @@ class McpServerPaginationTest extends AbstractMcpTest
         $this->http->addResponse($simple, 200);
         $result = $this->post(
             $this->jsonRpc('resources/read', ['uri' => 'easyverein://member/42']),
-            'Bearer test-token'
+            'Bearer test-token',
         );
         $content = $result['data']['result']['contents'][0]['text'] ?? '{}';
         $data    = json_decode($content, true);

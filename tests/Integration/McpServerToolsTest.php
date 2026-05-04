@@ -47,7 +47,7 @@ class McpServerToolsTest extends AbstractMcpTest
     {
         $this->http->addResponse('{"id":1}', 201);
         $result = $this->post(
-            $this->jsonRpc('tools/call', ['name' => 'createMember', 'arguments' => ['token' => 'tok', 'join_date' => '2025-01-01']])
+            $this->jsonRpc('tools/call', ['name' => 'createMember', 'arguments' => ['token' => 'tok', 'join_date' => '2025-01-01']]),
         );
         $toolResult = $result['data']['result'] ?? null;
         self::assertNotNull($toolResult, 'Expected result, got: ' . json_encode($result['data']));
@@ -58,7 +58,7 @@ class McpServerToolsTest extends AbstractMcpTest
     public function testToolsCallUnknownToolReturnsIsError(): void
     {
         $result = $this->post(
-            $this->jsonRpc('tools/call', ['name' => 'totallyFakeToolName', 'arguments' => ['token' => 'tok']])
+            $this->jsonRpc('tools/call', ['name' => 'totallyFakeToolName', 'arguments' => ['token' => 'tok']]),
         );
         // Unknown tool → InvalidArgumentException → -32602
         self::assertSame(-32602, $result['data']['error']['code'] ?? null);
@@ -68,7 +68,7 @@ class McpServerToolsTest extends AbstractMcpTest
     {
         $this->http->addResponse('Server Error', 500);
         $result = $this->post(
-            $this->jsonRpc('tools/call', ['name' => 'createMember', 'arguments' => ['token' => 'tok', 'join_date' => '2025-01-01']])
+            $this->jsonRpc('tools/call', ['name' => 'createMember', 'arguments' => ['token' => 'tok', 'join_date' => '2025-01-01']]),
         );
         $toolResult = $result['data']['result'] ?? null;
         self::assertNotNull($toolResult, json_encode($result['data']));
@@ -79,7 +79,7 @@ class McpServerToolsTest extends AbstractMcpTest
     {
         $this->http->addResponse('Unauthorized', 401);
         $result = $this->post(
-            $this->jsonRpc('tools/call', ['name' => 'createMember', 'arguments' => ['token' => 'tok', 'join_date' => '2025-01-01']])
+            $this->jsonRpc('tools/call', ['name' => 'createMember', 'arguments' => ['token' => 'tok', 'join_date' => '2025-01-01']]),
         );
         // AuthException from API → 401 HTTP status
         self::assertSame(401, $result['status']);
@@ -90,14 +90,14 @@ class McpServerToolsTest extends AbstractMcpTest
         $this->http->addResponse('{"id":1}', 201);
         $result = $this->post(
             $this->jsonRpc('tools/call', ['name' => 'createMember', 'arguments' => ['join_date' => '2025-01-01']]),
-            'Bearer header-token'
+            'Bearer header-token',
         );
         $toolResult = $result['data']['result'] ?? null;
         self::assertNotNull($toolResult, json_encode($result['data']));
         self::assertFalse($toolResult['isError']);
         // Check the token was forwarded
         $headers    = $this->http->getLastCall()['headers'];
-        $authHeader = array_values(array_filter($headers, fn ($h) => str_starts_with($h, 'Authorization:')));
+        $authHeader = array_values(array_filter($headers, fn($h) => str_starts_with($h, 'Authorization:')));
         self::assertStringContainsString('header-token', $authHeader[0] ?? '');
     }
 
@@ -108,7 +108,7 @@ class McpServerToolsTest extends AbstractMcpTest
         $result = $this->post($this->jsonRpc('tools/list'));
         $tools  = $result['data']['result']['tools'];
         // createMember is a mutating tool, NOT readOnly
-        $createTool = array_values(array_filter($tools, fn ($t) => $t['name'] === 'createMember'))[0] ?? null;
+        $createTool = array_values(array_filter($tools, fn($t) => $t['name'] === 'createMember'))[0] ?? null;
         self::assertNotNull($createTool);
         self::assertFalse($createTool['annotations']['readOnlyHint']);
     }
@@ -117,7 +117,7 @@ class McpServerToolsTest extends AbstractMcpTest
     {
         $result = $this->post($this->jsonRpc('tools/list'));
         $tools  = $result['data']['result']['tools'];
-        $deleteTool = array_values(array_filter($tools, fn ($t) => $t['name'] === 'deleteMember'))[0] ?? null;
+        $deleteTool = array_values(array_filter($tools, fn($t) => $t['name'] === 'deleteMember'))[0] ?? null;
         self::assertNotNull($deleteTool);
         self::assertTrue($deleteTool['annotations']['destructiveHint']);
         self::assertFalse($deleteTool['annotations']['readOnlyHint']);

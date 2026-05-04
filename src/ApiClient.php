@@ -81,7 +81,7 @@ class ApiClient
         if ($statusCode === 429) {
             $retryAfter = max(1, (int) ($respHeaders['retry-after'] ?? 1));
             if ($retried) {
-                throw new RateLimitException($retryAfter, $response);
+                throw new RateLimitException($retryAfter);
             }
             Logger::warning('Rate limit hit, retrying', ['retry_after' => $retryAfter, 'url' => $url]);
             sleep(min($retryAfter, 60));

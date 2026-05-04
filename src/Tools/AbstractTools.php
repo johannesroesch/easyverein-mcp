@@ -28,8 +28,12 @@ abstract class AbstractTools
     protected function pagination(array $p): array
     {
         $q = [];
-        if (isset($p['limit']))  $q['limit']  = (int) $p['limit'];
-        if (isset($p['page']))   $q['page']   = (int) $p['page'];
+        if (isset($p['limit'])) {
+            $q['limit']  = (int) $p['limit'];
+        }
+        if (isset($p['page'])) {
+            $q['page']   = (int) $p['page'];
+        }
         return $q;
     }
 

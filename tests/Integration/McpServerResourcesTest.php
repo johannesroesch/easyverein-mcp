@@ -36,7 +36,7 @@ class McpServerResourcesTest extends AbstractMcpTest
         $this->http->addResponse('{"id":42,"profileName":"Max"}', 200);
         $result = $this->post(
             $this->jsonRpc('resources/read', ['uri' => 'easyverein://member/42']),
-            'Bearer test-token'
+            'Bearer test-token',
         );
         self::assertArrayHasKey('result', $result['data']);
         self::assertArrayHasKey('contents', $result['data']['result']);
@@ -46,7 +46,7 @@ class McpServerResourcesTest extends AbstractMcpTest
     {
         $result = $this->post(
             $this->jsonRpc('resources/read', ['uri' => 'easyverein://totally-unknown/123']),
-            'Bearer test-token'
+            'Bearer test-token',
         );
         self::assertArrayHasKey('result', $result['data']);
         self::assertNotEmpty($result['data']['result']['contents'][0]['text'] ?? '');

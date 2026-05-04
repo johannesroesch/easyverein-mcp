@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace EasyVerein\Mcp\Tools;
 
-use EasyVerein\Mcp\ApiClient;
-
 class FinanceTools extends AbstractTools
 {
-
     public function getDefinitions(): array
     {
         $pagination = [
@@ -25,7 +22,7 @@ class FinanceTools extends AbstractTools
             'date'              => ['type' => 'string',  'description' => 'Date (YYYY-MM-DD)'],
             'receiver'          => ['type' => 'string',  'description' => 'Recipient name'],
             'billing_id'        => ['type' => 'string',  'description' => 'Billing reference ID'],
-            'payment_difference'=> ['type' => 'number',  'description' => 'Zahlenwert'],
+            'payment_difference' => ['type' => 'number',  'description' => 'Zahlenwert'],
             'counterpart_iban'  => ['type' => 'string',  'description' => 'Counterpart IBAN'],
             'counterpart_bic'   => ['type' => 'string',  'description' => 'Counterpart BIC'],
             'twingle_donation'  => ['type' => 'boolean', 'description' => 'Twingle donation flag'],
@@ -251,9 +248,9 @@ class FinanceTools extends AbstractTools
             'deletePaymentMethod'          => $this->deleted($p['token'], '/payment-method/' . $p['id'] . '/', 'PaymentMethod'),
             'listParticipationPriceGroups' => $this->client->get($p['token'], '/participation-price-group/', $this->pagination($p)),
             'getParticipationPriceGroup'   => $this->client->get($p['token'], '/participation-price-group/' . $p['id'] . '/'),
-            'createParticipationPriceGroup'=> $this->client->post($p['token'], '/participation-price-group/', $this->bodyFrom($p, ['participation', 'price_group', 'pieces'])),
-            'updateParticipationPriceGroup'=> $this->client->patch($p['token'], '/participation-price-group/' . $p['id'] . '/', $this->bodyFrom($p, ['participation', 'price_group', 'pieces'])),
-            'deleteParticipationPriceGroup'=> $this->deleted($p['token'], '/participation-price-group/' . $p['id'] . '/', 'ParticipationPriceGroup'),
+            'createParticipationPriceGroup' => $this->client->post($p['token'], '/participation-price-group/', $this->bodyFrom($p, ['participation', 'price_group', 'pieces'])),
+            'updateParticipationPriceGroup' => $this->client->patch($p['token'], '/participation-price-group/' . $p['id'] . '/', $this->bodyFrom($p, ['participation', 'price_group', 'pieces'])),
+            'deleteParticipationPriceGroup' => $this->deleted($p['token'], '/participation-price-group/' . $p['id'] . '/', 'ParticipationPriceGroup'),
             'cancellation'                 => $this->client->post($p['token'], '/cancellation/', $this->bodyFrom($p, ['member', 'date'])),
             'checkDiscountCode'            => $this->client->post($p['token'], '/check-discount-code/', $this->bodyFrom($p, ['discount_code', 'event'])),
             default => throw new \InvalidArgumentException("Unknown tool: $name"),
